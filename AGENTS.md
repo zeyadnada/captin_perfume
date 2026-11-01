@@ -1,47 +1,216 @@
-<laravel-boost-guidelines>
-# Laravel Application
+# Perfume E-commerce – Project Instructions
 
-This repository contains a Laravel application. Complete the following setup before working on the user's request.
+## 1. Project Overview
 
-## Prerequisites
+We are building a single-store Perfume E-commerce application using Laravel 13
+and PHP 8.3.
 
-Verify that PHP and Composer are available:
+This is NOT a multi-vendor marketplace. There is only one store managed through a central admin dashboard.
 
-```sh
-php -v
-composer -V
-```
+The application will eventually include:
 
-If either command is unavailable, detect the user's operating system and install the prerequisites with the appropriate command:
+- Admin Dashboard.
+- Customer-facing E-commerce Website.
+- Product and Inventory Management.
+- Shopping Cart and Checkout.
+- Order Management.
+- Payment and Shipping Integration.
+- Customer Management.
 
-macOS:
+**Development will start with the Admin Dashboard**, focusing on project setup, master data, and normal CRUD operations. The customer-facing website will be developed later.
 
-```sh
-/bin/bash -c "$(curl -fsSL https://php.new/install/mac/8.5)"
-```
+## 2. Technology Stack
 
-Windows PowerShell:
+- Backend: Laravel 13.
+- Language: PHP 8.3.
+- Database: MySQL.
+- Frontend: Blade.
+- CSS Framework: Bootstrap.
+- JavaScript: Vanilla JavaScript.
+- Authentication: Laravel authentication.
+- Permissions: Spatie Laravel Permission.
+- API Authentication: Laravel Sanctum (when API development starts).
+- API Documentation: Scramble (when API development starts).
+- Testing: Pest or PHPUnit.
 
-```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://php.new/install/windows/8.5'))
-```
+Do not introduce additional technologies or packages without a good reason.
 
-Linux:
+## 3. Existing Admin Dashboard Template – CoolAdmin
 
-```sh
-/bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.5)"
-```
+The project already contains a Bootstrap Admin Dashboard template called **CoolAdmin**.
 
-After installation, ask the user to restart their terminal. If the agent needs the restarted shell to continue, ask the user to reopen their terminal and rerun their original prompt.
+Its original folder is located in the project root:
 
-## Agent Setup
+`CoolAdmin/`
 
-Install Laravel Boost from the application root before making application changes:
+This folder is excluded from Git tracking through `.gitignore`.
 
-```sh
-composer require laravel/boost --dev
-php artisan boost:install
-```
+Important instructions:
 
-Boost replaces these bootstrap instructions with guidelines tailored to the application. After installation, read `AGENTS.md` again and continue with the user's original request using the generated guidelines.
-</laravel-boost-guidelines>
+- Inspect the CoolAdmin folder before implementing any dashboard pages.
+- Understand its HTML structure, layouts, CSS, JavaScript, images, fonts, and components.
+- Use CoolAdmin as the design reference for the entire admin dashboard.
+- Integrate the template into Laravel Blade views.
+- Create reusable Blade layouts and components where appropriate.
+- Reuse its existing design, colors, buttons, forms, tables, cards, and other UI components.
+- Do not create a new dashboard design.
+- Do not introduce another UI framework.
+- Do not unnecessarily modify the original CoolAdmin source files.
+
+The original CoolAdmin folder should remain available as a reference. Copy only the required assets into Laravel's public directory when integrating the template.
+
+## 4. Architecture and Coding Standards
+
+Follow Laravel 13 best practices and write clean, maintainable, readable code.
+
+General rules:
+
+- Follow SOLID principles where appropriate.
+- Use dependency injection.
+- Use Form Request classes for validation.
+- Use Eloquent relationships properly.
+- Avoid N+1 query problems.
+- Use database transactions for operations involving multiple related database changes.
+- Use Policies and Gates for authorization.
+- Use Events and Listeners when they provide meaningful decoupling.
+- Use Jobs and Queues for suitable background operations.
+- Use Enums when they improve clarity and maintainability.
+- Keep controllers focused and avoid massive controllers.
+- Follow proper Laravel and PHP naming conventions.
+- Handle exceptions appropriately.
+- Avoid duplicated business logic.
+- Write meaningful automated tests for important business logic.
+
+Do not over-engineer simple CRUD operations.
+
+Do not create unnecessary Repository, Service, Interface, or Factory classes just for the sake of applying design patterns.
+
+Introduce abstractions only when they provide real benefits.
+
+## 5. Learning Objectives
+
+This project is also a practical opportunity to improve my backend development skills.
+
+Help me understand and practice:
+
+- Advanced Laravel concepts.
+- Eloquent relationships and query optimization.
+- SOLID principles.
+- Dependency Injection and Service Container.
+- Design Patterns.
+- Database Transactions.
+- Events, Listeners, and Queues.
+- Authentication and Authorization.
+- API development.
+- Automated Testing.
+- Security and Performance Optimization.
+
+When implementing something technically important:
+
+1. Explain what the concept does.
+2. Explain why we need it in the current feature.
+3. Explain important architectural decisions.
+4. Mention alternative approaches when relevant.
+
+Keep explanations practical and related to the actual implementation. Avoid unnecessary theoretical lectures.
+
+## 6. Development Roadmap
+
+Follow this roadmap in order. Do not jump to future phases unless explicitly requested.
+
+### Phase 1 – Project Foundation
+- Inspect the existing Laravel project.
+- Configure the database.
+- Integrate the CoolAdmin dashboard template.
+- Set up authentication.
+- Set up admin access and permissions.
+- Prepare the application structure.
+
+### Phase 2 – Admin Dashboard and Master Data
+- Brands Management.
+- Categories Management.
+- Product Management.
+- Product Variants.
+- Product Images.
+- Other necessary master data.
+
+### Phase 3 – Inventory Management
+- Stock management.
+- Stock movements.
+- Inventory adjustments.
+
+### Phase 4 – E-commerce Core
+- Customer accounts.
+- Product catalog.
+- Shopping cart.
+- Checkout.
+- Customer addresses.
+
+### Phase 5 – Orders and Payments
+- Order management.
+- Order items.
+- Order status management.
+- Payment methods and integration.
+- Shipping and delivery management.
+
+### Phase 6 – Advanced Features
+- Coupons and discounts.
+- Product reviews.
+- Notifications.
+- Reports and analytics.
+- API development.
+
+### Phase 7 – Quality and Deployment
+- Automated testing for only critical parts.
+- Security review.
+- Query optimization.
+- Caching and queues.
+- Deployment.
+
+## 7. AI Development Workflow
+
+Work with me as a collaborative Laravel developer, not just an autonomous code generator.
+
+For every new module or significant feature, follow this workflow:
+
+### Step 1 – Analyze
+- Understand the requirements.
+- Inspect relevant existing code.
+- Identify dependencies and affected files.
+
+### Step 2 – Plan
+- Propose the database structure.
+- Explain relationships.
+- Identify required models, controllers, requests, views, and other classes.
+- Explain important architectural decisions.
+
+### Step 3 – Implement
+- Implement the feature in small, logical steps.
+- Follow existing project conventions.
+- Avoid modifying unrelated files.
+
+### Step 4 – Review
+- Check validation, authorization, security, and performance.
+- Identify potential bugs and edge cases.
+- Add tests for important business logic.
+
+### Step 5 – Explain
+- Summarize what was implemented.
+- Explain important Laravel concepts used.
+- Mention any decisions I should understand before moving forward.
+
+## 8. Important Rules
+- Never assume the existing project structure. Inspect it first.
+- Never overwrite or replace existing dashboard template files without checking their usage.
+- Never install unnecessary packages.
+- Never modify unrelated code.
+- Never generate the entire application in one operation.
+- Never skip database design before implementing a new module.
+- Never implement complex business logic without explaining it.
+- Prefer simple, maintainable solutions over unnecessary abstractions.
+- Ask me when an important business requirement is unclear.
+- Preserve existing functionality when adding new features.
+- Follow the current development phase and do not implement future features prematurely.
+- Explain significant changes before applying them.
+
+Remember: This is a real freelancing project and a learning opportunity. Code quality, maintainability, and understanding are as important as completing features.
