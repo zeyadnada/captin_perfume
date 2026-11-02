@@ -1,7 +1,7 @@
 @php
     $navigation = [
         ['label' => 'Dashboard', 'icon' => 'fa-solid fa-gauge-high', 'route' => 'admin.dashboard'],
-        ['label' => 'Brands', 'icon' => 'fa-solid fa-tags', 'route' => null],
+        ['label' => 'Brands', 'icon' => 'fa-solid fa-tags', 'route' => 'admin.brands.index'],
         ['label' => 'Categories', 'icon' => 'fa-solid fa-folder-tree', 'route' => null],
         ['label' => 'Products', 'icon' => 'fa-solid fa-bottle-droplet', 'route' => null],
     ];
