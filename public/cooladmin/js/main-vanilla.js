@@ -769,7 +769,6 @@ ready(() => {
   initResponsiveTableShadows();
   initToastSystem();
   initCommandPalette();
-  initThemeSwitcher();
   initDashboardRefresh();
 });
 

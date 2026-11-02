@@ -2491,6 +2491,16 @@ body.app .table-data-feature .item i {
   font-size: 12px;
 }
 
+body.app .pagination .page-link {
+  min-width: 30px;
+  height: 30px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Table-data3 — bottom sales table */
 body.app .table-data3 thead th {
   background: var(--m-surface-2);
@@ -3894,6 +3904,10 @@ body.app .form-control.is-invalid:focus,
 body.app .form-control-danger:focus {
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
 }
+
+/* body.app .au-input.is-invalid ~ .invalid-feedback {
+  display: block;
+} */
 
 body.app .has-success .help-block {
   color: var(--m-success);

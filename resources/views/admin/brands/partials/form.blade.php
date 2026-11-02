@@ -4,12 +4,6 @@
         @method($method)
     @endif
 
-    @if ($errors->any())
-        <div class="alert alert-danger" role="alert">
-            Please correct the highlighted fields.
-        </div>
-    @endif
-
     <div class="mb-3">
         <label class="form-label" for="name">Name <span class="text-danger" aria-hidden="true">*</span></label>
         <input class="au-input @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $brand->name) }}" required>

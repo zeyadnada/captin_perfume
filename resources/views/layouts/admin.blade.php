@@ -15,6 +15,7 @@
     <link href="{{ asset('cooladmin/vendor/css-hamburgers/hamburgers.min.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('cooladmin/css/theme.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('cooladmin/css/app.css') }}" rel="stylesheet" media="all">
+    <link href="{{ asset('cooladmin/vendor/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" media="all">
     @stack('styles')
 </head>
 <body class="app">
@@ -36,9 +37,9 @@
             </main>
         </div>
     </div>
-
     <script src="{{ asset('cooladmin/js/vanilla-utils.js') }}"></script>
     <script src="{{ asset('cooladmin/vendor/bootstrap-5.3.8.bundle.min.js') }}"></script>
+    <script src="{{ asset('cooladmin/vendor/sweetalert2/sweetalert2.min.js') }}"></script>
     @stack('vendor-scripts')
     <script src="{{ asset('cooladmin/js/bootstrap5-init.js') }}"></script>
     <script src="{{ asset('cooladmin/js/main-vanilla.js') }}"></script>

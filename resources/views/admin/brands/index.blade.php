@@ -32,20 +32,21 @@
                     </select>
                 </div>
                 <div class="col-md-3 d-flex align-items-end gap-2">
-                    <button class="au-btn au-btn--blue au-btn--small flex-grow-1" type="submit" title="Apply filters" aria-label="Apply filters">
-                        <i class="fa-solid fa-filter me-1" aria-hidden="true"></i>
+                    <button class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1 px-3" type="submit">
+                        <i class="fa-solid fa-filter" aria-hidden="true"></i>
                         Filter
                     </button>
-                    <a href="{{ route('admin.brands.index') }}" class="btn btn-outline-secondary d-inline-flex align-items-center justify-content-center" style="height: 30px; width: 30px; padding: 0;" title="Reset filters" aria-label="Reset filters">
+                    <a href="{{ route('admin.brands.index') }}" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center justify-content-center" aria-label="Reset filters">
                         <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
                     </a>
                 </div>
             </form>
 
             <div class="table-responsive">
-                <table class="table table-borderless table-data3">
+                <table class="table table-data2">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Logo</th>
                             <th>Name</th>
                             <th>Slug</th>
@@ -56,9 +57,10 @@
                     <tbody>
                         @forelse ($brands as $brand)
                             <tr>
+                                <td>{{ $loop->index + 1 }}</td>
                                 <td>
                                     @if ($brand->logo)
-                                        <img src="{{ asset('storage/'.$brand->logo) }}" alt="{{ $brand->name }}" width="48" height="48" style="object-fit: cover;">
+                                        <img class="rounded border" src="{{ asset('storage/'.$brand->logo) }}" alt="{{ $brand->name }}" width="48" height="48">
                                     @else
                                         <span class="badge bg-secondary">No logo</span>
                                     @endif
@@ -72,29 +74,54 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="table-data-feature">
-                                        <a href="{{ route('admin.brands.edit', $brand) }}" class="item text-decoration-none" data-bs-toggle="tooltip" title="Edit {{ $brand->name }}" aria-label="Edit {{ $brand->name }}">
+                                        <a href="{{ route('admin.brands.edit', $brand) }}" class="btn btn-primary btn-sm d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" aria-label="Edit {{ $brand->name }}">
                                             <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
                                         </a>
-                                        <form method="POST" action="{{ route('admin.brands.destroy', $brand) }}" class="d-inline" onsubmit="return confirm('Delete this brand?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="item p-0" type="submit" data-bs-toggle="tooltip" title="Delete {{ $brand->name }}" aria-label="Delete {{ $brand->name }}">
-                                                <i class="fa-solid fa-trash" aria-hidden="true"></i>
-                                            </button>
-                                        </form>
+                                        <button class="btn btn-danger btn-sm delete-brand-trigger d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" type="button" data-brand-name="{{ $brand->name }}" data-delete-url="{{ route('admin.brands.destroy', $brand) }}" aria-label="Delete {{ $brand->name }}">
+                                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center py-4">No brands found.</td>
+                                <td colspan="6" class="text-center py-4">No brands found.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
 
-            {{ $brands->links() }}
+            <div class="mt-3">
+                {{ $brands->links() }}
+            </div>
         </div>
     </div>
+
+    <form id="delete-brand-form" method="POST" class="d-none">
+        @csrf
+        @method('DELETE')
+    </form>
+
+    @push('scripts')
+        <script>
+            document.querySelectorAll('.delete-brand-trigger').forEach(button => {
+                button.addEventListener('click', async () => {
+                    const { isConfirmed } = await Swal.fire({
+                        title: 'Delete brand?',
+                        text: `Delete "${button.dataset.brandName}"?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Delete',
+                        confirmButtonColor: '#dc3545'
+                    });
+
+                    if (isConfirmed) {
+                        document.getElementById('delete-brand-form').action = button.dataset.deleteUrl;
+                        document.getElementById('delete-brand-form').submit();
+                    }
+                });
+            });
+        </script>
+    @endpush
 @endsection

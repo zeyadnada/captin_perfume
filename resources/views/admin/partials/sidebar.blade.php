@@ -1,10 +1,5 @@
 @php
-    $navigation = [
-        ['label' => 'Dashboard', 'icon' => 'fa-solid fa-gauge-high', 'route' => 'admin.dashboard'],
-        ['label' => 'Brands', 'icon' => 'fa-solid fa-tags', 'route' => 'admin.brands.index'],
-        ['label' => 'Categories', 'icon' => 'fa-solid fa-folder-tree', 'route' => null],
-        ['label' => 'Products', 'icon' => 'fa-solid fa-bottle-droplet', 'route' => null],
-    ];
+    $masterDataActive = request()->routeIs('admin.brands.*');
 @endphp
 
 <aside class="menu-sidebar" id="main-sidebar">
@@ -20,20 +15,31 @@
     <div class="menu-sidebar__content js-scrollbar1">
         <nav class="navbar-sidebar">
             <ul class="list-unstyled navbar__list">
-                @foreach ($navigation as $item)
-                    @php $active = $item['route'] && request()->routeIs($item['route']); @endphp
-                    <li class="{{ $active ? 'active' : '' }}">
-                        @if ($item['route'])
-                            <a href="{{ route($item['route']) }}" @if ($active) aria-current="page" @endif>
-                                <i class="{{ $item['icon'] }}"></i>{{ $item['label'] }}
+                <li class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('admin.dashboard') }}" @if (request()->routeIs('admin.dashboard')) aria-current="page" @endif>
+                        <i class="fa-solid fa-gauge-high"></i>Dashboard
+                    </a>
+                </li>
+                <li class="has-sub {{ $masterDataActive ? 'active' : '' }}">
+                    <a class="js-arrow {{ $masterDataActive ? 'open' : '' }}" href="#" @if ($masterDataActive) aria-expanded="true" @endif>
+                        <i class="fa-solid fa-layer-group"></i>Master Data
+                    </a>
+                    <ul class="list-unstyled navbar__sub-list js-sub-list" @if ($masterDataActive) style="display: block;" @endif>
+                        <li class="{{ request()->routeIs('admin.brands.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.brands.index') }}" >
+                                Brands
                             </a>
-                        @else
-                            <a href="#" aria-disabled="true">
-                                <i class="{{ $item['icon'] }}"></i>{{ $item['label'] }}
-                            </a>
-                        @endif
-                    </li>
-                @endforeach
+                        </li>
+                        <li>
+                            <a href="#" aria-disabled="true">Categories</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" aria-disabled="true">
+                        <i class="fa-solid fa-bottle-droplet"></i>Products
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
