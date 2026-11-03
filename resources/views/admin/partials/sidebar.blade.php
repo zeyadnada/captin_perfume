@@ -1,5 +1,5 @@
 @php
-    $masterDataActive = request()->routeIs('admin.brands.*');
+    $masterDataActive = request()->routeIs('admin.brands.*', 'admin.categories.*');
 @endphp
 
 <aside class="menu-sidebar" id="main-sidebar">
@@ -30,8 +30,8 @@
                                 Brands
                             </a>
                         </li>
-                        <li>
-                            <a href="#" aria-disabled="true">Categories</a>
+                        <li class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.categories.index') }}">Categories</a>
                         </li>
                     </ul>
                 </li>
