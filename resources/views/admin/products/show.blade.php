@@ -89,6 +89,32 @@
     <div class="au-card m-b-30">
         <div class="au-card-inner">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 m-b-20">
+                <h3 class="title-2 mb-0">Images</h3>
+                <a href="{{ route('admin.products.images.index', $product) }}" class="au-btn au-btn--green au-btn--small">
+                    <i class="fa-solid fa-images" aria-hidden="true"></i>
+                    Manage images
+                </a>
+            </div>
+
+            @if ($product->images->isEmpty())
+                <p class="text-muted mb-0">No images have been uploaded.</p>
+            @else
+                <div class="row">
+                    @foreach ($product->images as $image)
+                        <div class="col-6 col-md-3 col-lg-2 mb-3">
+                            <div class="position-relative border rounded bg-light" style="height: 150px;">
+                                <img src="{{ asset('storage/'.$image->path) }}" alt="{{ $product->name }}" class="w-100 h-100 rounded" style="object-fit: contain;">
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </div>
+
+    <div class="au-card m-b-30">
+        <div class="au-card-inner">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 m-b-20">
                 <h3 class="title-2 mb-0">Variants</h3>
                 <a href="{{ route('admin.products.variants.index', $product) }}" class="au-btn au-btn--green au-btn--small">
                     <i class="fa-solid fa-layer-group" aria-hidden="true"></i>

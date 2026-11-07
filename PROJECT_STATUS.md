@@ -3,9 +3,9 @@
 ## Current Position
 
 - Roadmap phase: Phase 2 - Admin Dashboard and Master Data
-- Current module: Product Variants
+- Current module: Product Images
 - Status: Implemented
-- Next module: Product Images
+- Next module: Other necessary master data, to be defined
 
 ## Completed Work
 
@@ -77,6 +77,20 @@ Verification:
 
 Verification status:
 
+- Runtime test and Pint results remain pending terminal verification.
+
+### Phase 2 - Product Images
+
+- Added the `product_images` migration with product relationship, public file path, and sort order.
+- Added the `ProductImage` model, factory, and product gallery relationship.
+- Added nested image routes and the admin gallery controller.
+- Added upload and metadata Form Request validation.
+- Added multi-image upload, ordering, deletion, and physical file cleanup.
+- Added gallery preview and gallery management access to the Product show page.
+
+Verification status:
+
+- Product Image feature tests have been added.
 - Runtime test and Pint results remain pending terminal verification.
 
 ## Known Pending Items

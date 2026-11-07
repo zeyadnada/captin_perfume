@@ -61,6 +61,7 @@ class ProductController extends Controller
             'brand:id,name,slug,logo',
             'category:id,name,slug',
             'variants' => fn ($query) => $query->latest()->limit(5),
+            'images' => fn ($query) => $query->orderBy('sort_order')->orderBy('id')->limit(6),
         ]);
         $product->loadCount('variants');
 
