@@ -67,6 +67,7 @@
                             <th>Product</th>
                             <th>Brand</th>
                             <th>Category</th>
+                            <th>Variants</th>
                             <th>Price</th>
                             <th>Status</th>
                             <th class="text-end">Actions</th>
@@ -82,6 +83,11 @@
                                 </td>
                                 <td>{{ $product->brand->name }}</td>
                                 <td>{{ $product->category->name }}</td>
+                                <td>
+                                    <a href="{{ route('admin.products.variants.index', $product) }}" class="badge bg-secondary text-decoration-none">
+                                        {{ $product->variants_count }} {{ \Illuminate\Support\Str::plural('variant', $product->variants_count) }}
+                                    </a>
+                                </td>
                                 <td>{{ number_format((float) $product->price, 2) }}</td>
                                 <td>
                                     <span class="{{ $product->is_active ? 'status--process' : 'status--denied' }}">
@@ -104,7 +110,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center py-4">No products found.</td>
+                                <td colspan="8" class="text-center py-4">No products found.</td>
                             </tr>
                         @endforelse
                     </tbody>

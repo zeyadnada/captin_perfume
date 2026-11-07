@@ -29,6 +29,7 @@
                             <th>Variant</th>
                             <th>SKU</th>
                             <th>Price</th>
+                            <th>Compare-at price</th>
                             <th>Status</th>
                             <th class="text-end">Actions</th>
                         </tr>
@@ -40,6 +41,7 @@
                                 <td><strong>{{ $variant->display_name }}</strong></td>
                                 <td>{{ $variant->sku ?: 'Not assigned' }}</td>
                                 <td>{{ number_format((float) $variant->price, 2) }}</td>
+                                <td>{{ is_null($variant->compare_at_price) ? 'Not set' : number_format((float) $variant->compare_at_price, 2) }}</td>
                                 <td>
                                     <span class="{{ $variant->is_active ? 'status--process' : 'status--denied' }}">
                                         {{ $variant->is_active ? 'Active' : 'Inactive' }}
@@ -58,7 +60,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center py-4">No variants found.</td>
+                                <td colspan="7" class="text-center py-4">No variants found.</td>
                             </tr>
                         @endforelse
                     </tbody>

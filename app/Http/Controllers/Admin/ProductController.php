@@ -18,6 +18,7 @@ class ProductController extends Controller
     {
         $products = Product::query()
             ->with(['brand:id,name', 'category:id,name'])
+            ->withCount('variants')
             ->when($request->string('search')->trim()->value(), function ($query, string $search): void {
                 $query->where(function ($query) use ($search): void {
                     $query->where('name', 'like', "%{$search}%")
@@ -56,7 +57,12 @@ class ProductController extends Controller
 
     public function show(Product $product): View
     {
-        $product->load(['brand:id,name,slug,logo', 'category:id,name,slug', 'variants']);
+        $product->load([
+            'brand:id,name,slug,logo',
+            'category:id,name,slug',
+            'variants' => fn ($query) => $query->latest()->limit(5),
+        ]);
+        $product->loadCount('variants');
 
         return view('admin.products.show', compact('product'));
     }

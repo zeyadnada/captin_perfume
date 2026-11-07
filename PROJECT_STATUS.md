@@ -4,8 +4,8 @@
 
 - Roadmap phase: Phase 2 - Admin Dashboard and Master Data
 - Current module: Product Variants
-- Status: Implementing
-- Next module: Product Variants
+- Status: Implemented
+- Next module: Product Images
 
 ## Completed Work
 
@@ -64,6 +64,20 @@ Verification:
 - Added product CRUD, search, brand/category/status filtering, and pagination.
 - Added CoolAdmin product index, show, create, and edit Blade views and sidebar navigation.
 - Added Product feature tests.
+
+### Phase 2 - Product Variants
+
+- Added the `product_variants` migration with structured volume/unit, unique SKU, price, compare-at price, active status, and soft deletion.
+- Added the `ProductVariant` model, factory, and Product relationship.
+- Added nested product-variant routes and admin CRUD controller.
+- Added Store/Update Form Requests with duplicate volume/unit and compare-at-price validation.
+- Added CoolAdmin variant index, create, edit, and Product show-page preview views.
+- Added variant counts to the Product index and Product feature integration.
+- Added Product Variant feature tests.
+
+Verification status:
+
+- Runtime test and Pint results remain pending terminal verification.
 
 ## Known Pending Items
 

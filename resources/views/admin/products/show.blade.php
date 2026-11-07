@@ -9,9 +9,6 @@
             <a href="{{ route('admin.products.index') }}" class="au-btn btn btn-secondary au-btn--small">
                 <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to products
             </a>
-            <a href="{{ route('admin.products.variants.index', $product) }}" class="au-btn au-btn--green au-btn--small">
-                <i class="fa-solid fa-layer-group" aria-hidden="true"></i> Manage variants
-            </a>
         </x-slot:actions>
     </x-page-header>
 
@@ -86,6 +83,60 @@
                     </dl>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="au-card m-b-30">
+        <div class="au-card-inner">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 m-b-20">
+                <h3 class="title-2 mb-0">Variants</h3>
+                <a href="{{ route('admin.products.variants.index', $product) }}" class="au-btn au-btn--green au-btn--small">
+                    <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                    Manage variants
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-data2">
+                    <thead>
+                        <tr>
+                            <th>Variant</th>
+                            <th>SKU</th>
+                            <th>Price</th>
+                            <th>Compare-at price</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($product->variants->take(5) as $variant)
+                            <tr>
+                                <td><strong>{{ $variant->display_name }}</strong></td>
+                                <td>{{ $variant->sku ?: 'Not assigned' }}</td>
+                                <td>{{ number_format((float) $variant->price, 2) }}</td>
+                                <td>{{ is_null($variant->compare_at_price) ? 'Not set' : number_format((float) $variant->compare_at_price, 2) }}</td>
+                                <td>
+                                    <span class="{{ $variant->is_active ? 'status--process' : 'status--denied' }}">
+                                        {{ $variant->is_active ? 'Active' : 'Inactive' }}
+                                    </span>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-4">
+                                    No variants have been added.
+                                    <a href="{{ route('admin.products.variants.create', $product) }}">Add the first variant</a>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            @if ($product->variants_count > 5)
+                <div class="text-end mt-3">
+                    <a href="{{ route('admin.products.variants.index', $product) }}">View all {{ $product->variants_count }} variants</a>
+                </div>
+            @endif
         </div>
     </div>
 @endsection
