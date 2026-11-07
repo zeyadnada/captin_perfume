@@ -9,6 +9,9 @@
             <a href="{{ route('admin.products.index') }}" class="au-btn btn btn-secondary au-btn--small">
                 <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to products
             </a>
+            <a href="{{ route('admin.products.variants.index', $product) }}" class="au-btn au-btn--green au-btn--small">
+                <i class="fa-solid fa-layer-group" aria-hidden="true"></i> Manage variants
+            </a>
         </x-slot:actions>
     </x-page-header>
 

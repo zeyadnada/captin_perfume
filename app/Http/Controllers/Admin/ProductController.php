@@ -56,7 +56,7 @@ class ProductController extends Controller
 
     public function show(Product $product): View
     {
-        $product->load(['brand:id,name,slug,logo', 'category:id,name,slug']);
+        $product->load(['brand:id,name,slug,logo', 'category:id,name,slug', 'variants']);
 
         return view('admin.products.show', compact('product'));
     }
