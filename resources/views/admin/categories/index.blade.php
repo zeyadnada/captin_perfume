@@ -68,7 +68,7 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="table-data-feature">
-                                        <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-primary btn-sm d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" aria-label="Edit {{ $category->name }}">
+                                        <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-warning btn-sm d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" aria-label="Edit {{ $category->name }}">
                                             <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
                                         </a>
                                         <button class="btn btn-danger btn-sm delete-category-trigger d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" type="button" data-category-name="{{ $category->name }}" data-delete-url="{{ route('admin.categories.destroy', $category) }}" aria-label="Delete {{ $category->name }}">

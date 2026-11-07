@@ -74,7 +74,7 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="table-data-feature">
-                                        <a href="{{ route('admin.brands.edit', $brand) }}" class="btn btn-primary btn-sm d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" aria-label="Edit {{ $brand->name }}">
+                                        <a href="{{ route('admin.brands.edit', $brand) }}" class="btn btn-warning btn-sm d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" aria-label="Edit {{ $brand->name }}">
                                             <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
                                         </a>
                                         <button class="btn btn-danger btn-sm delete-brand-trigger d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" type="button" data-brand-name="{{ $brand->name }}" data-delete-url="{{ route('admin.brands.destroy', $brand) }}" aria-label="Delete {{ $brand->name }}">

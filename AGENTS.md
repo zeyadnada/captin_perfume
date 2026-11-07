@@ -31,7 +31,6 @@ The application will eventually include:
 - Permissions: Spatie Laravel Permission.
 - API Authentication: Laravel Sanctum (when API development starts).
 - API Documentation: Scramble (when API development starts).
-- Testing: Pest or PHPUnit.
 
 Do not introduce additional technologies or packages without a good reason.
 
@@ -79,7 +78,6 @@ General rules:
 - Follow proper Laravel and PHP naming conventions.
 - Handle exceptions appropriately.
 - Avoid duplicated business logic.
-- Write meaningful automated tests for important business logic.
 
 Do not over-engineer simple CRUD operations.
 
@@ -102,7 +100,6 @@ Help me understand and practice:
 - Events, Listeners, and Queues.
 - Authentication and Authorization.
 - API development.
-- Automated Testing.
 - Security and Performance Optimization.
 
 When implementing something technically important:
@@ -161,7 +158,6 @@ Follow this roadmap in order. Do not jump to future phases unless explicitly req
 - API development.
 
 ### Phase 7 – Quality and Deployment
-- Automated testing for only critical parts.
 - Security review.
 - Query optimization.
 - Caching and queues.
@@ -192,7 +188,6 @@ For every new module or significant feature, follow this workflow:
 ### Step 4 – Review
 - Check validation, authorization, security, and performance.
 - Identify potential bugs and edge cases.
-- Add tests for important business logic.
 
 ### Step 5 – Explain
 - Summarize what was implemented.

@@ -35,8 +35,8 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#" aria-disabled="true">
+                <li class="{{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.products.index') }}">
                         <i class="fa-solid fa-bottle-droplet"></i>Products
                     </a>
                 </li>
