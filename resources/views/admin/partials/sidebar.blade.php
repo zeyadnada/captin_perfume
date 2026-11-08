@@ -40,6 +40,11 @@
                         <i class="fa-solid fa-bottle-droplet"></i>Products
                     </a>
                 </li>
+                <li class="{{ request()->routeIs('admin.inventory.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.inventory.index') }}">
+                        <i class="fa-solid fa-boxes-stacked"></i>Inventory
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>

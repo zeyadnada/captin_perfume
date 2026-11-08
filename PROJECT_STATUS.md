@@ -2,10 +2,10 @@
 
 ## Current Position
 
-- Roadmap phase: Phase 2 - Admin Dashboard and Master Data
-- Current module: Product Images
+- Roadmap phase: Phase 3 - Inventory Management
+- Current module: Stock management
 - Status: Implemented
-- Next module: Other necessary master data, to be defined
+- Next module: Stock movements
 
 ## Completed Work
 
@@ -92,6 +92,14 @@ Verification status:
 
 - Product Image feature tests have been added.
 - Runtime test and Pint results remain pending terminal verification.
+
+### Phase 3 - Stock Management
+
+- Added a one-to-one stock record for each product variant.
+- Added physical quantity, reserved quantity, available quantity, and low-stock threshold handling.
+- Added the inventory index and stock update pages using the CoolAdmin layout.
+- Added inventory sidebar navigation.
+- Added stock feature tests and route integrity validation.
 
 ## Known Pending Items
 

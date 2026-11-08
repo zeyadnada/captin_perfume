@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable(['product_id', 'volume', 'volume_unit', 'sku', 'price', 'compare_at_price', 'is_active'])]
@@ -28,6 +29,11 @@ class ProductVariant extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function stock(): HasOne
+    {
+        return $this->hasOne(ProductVariantStock::class);
     }
 
     public function getDisplayNameAttribute(): string

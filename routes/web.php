@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Admin\ProductVariantController;
@@ -15,6 +16,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('brands', BrandController::class)->except(['show']);
     Route::resource('categories', CategoryController::class)->except(['show']);
     Route::resource('products', ProductController::class);
+    Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
+    Route::get('/products/{product}/variants/{variant}/stock/edit', [InventoryController::class, 'edit'])->name('inventory.edit');
+    Route::put('/products/{product}/variants/{variant}/stock', [InventoryController::class, 'update'])->name('inventory.update');
     Route::resource('products.variants', ProductVariantController::class)->except(['show']);
     Route::resource('products.images', ProductImageController::class)
         ->except(['create', 'show', 'edit']);
