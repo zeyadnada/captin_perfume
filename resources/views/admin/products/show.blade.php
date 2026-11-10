@@ -43,34 +43,9 @@
                 </div>
             </div>
 
-            <div class="au-card m-b-30">
-                <div class="au-card-inner">
-                    <h3 class="title-2 m-b-30">Descriptions</h3>
-                    <dl class="row mb-0">
-                        <dt class="col-sm-4">Short description</dt>
-                        <dd class="col-sm-8">{{ $product->short_description ?: 'Not provided' }}</dd>
-
-                        <dt class="col-sm-4">Description</dt>
-                        <dd class="col-sm-8 text-break">{{ $product->description ?: 'Not provided' }}</dd>
-                    </dl>
-                </div>
-            </div>
         </div>
 
         <div class="col-lg-4">
-            <div class="au-card m-b-30">
-                <div class="au-card-inner">
-                    <h3 class="title-2 m-b-30">Pricing</h3>
-                    <dl class="row mb-0">
-                        <dt class="col-sm-6">Price</dt>
-                        <dd class="col-sm-6">{{ number_format((float) $product->price, 2) }}</dd>
-
-                        <dt class="col-sm-6">Compare-at price</dt>
-                        <dd class="col-sm-6">{{ is_null($product->compare_at_price) ? 'Not set' : number_format((float) $product->compare_at_price, 2) }}</dd>
-                    </dl>
-                </div>
-            </div>
-
             <div class="au-card m-b-30">
                 <div class="au-card-inner">
                     <h3 class="title-2 m-b-30">Record</h3>
@@ -83,6 +58,19 @@
                     </dl>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="au-card m-b-30">
+        <div class="au-card-inner">
+            <h3 class="title-2 m-b-30">Descriptions</h3>
+            <dl class="row mb-0">
+                <dt class="col-sm-2">Short description</dt>
+                <dd class="col-sm-10">{{ $product->short_description ?: 'Not provided' }}</dd>
+
+                <dt class="col-sm-2">Description</dt>
+                <dd class="col-sm-10 text-break">{{ $product->description ?: 'Not provided' }}</dd>
+            </dl>
         </div>
     </div>
 

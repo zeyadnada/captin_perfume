@@ -23,8 +23,6 @@ class ProductFactory extends Factory
             'sku' => strtoupper(fake()->unique()->bothify('PER-####-??')),
             'short_description' => fake()->optional()->sentence(),
             'description' => fake()->optional()->paragraph(),
-            'price' => fake()->randomFloat(2, 10, 5000),
-            'compare_at_price' => null,
             'is_active' => fake()->boolean(85),
         ];
     }

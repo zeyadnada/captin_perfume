@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('sku')->nullable()->unique();
             $table->string('short_description')->nullable();
             $table->text('description')->nullable();
-            $table->decimal('price', 12, 2);
-            $table->decimal('compare_at_price', 12, 2)->nullable();
             $table->boolean('is_active')->default(true)->index();
             $table->timestamps();
             $table->softDeletes();

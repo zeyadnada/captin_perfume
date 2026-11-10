@@ -68,7 +68,6 @@
                             <th>Brand</th>
                             <th>Category</th>
                             <th>Variants</th>
-                            <th>Price</th>
                             <th>Status</th>
                             <th class="text-end">Actions</th>
                         </tr>
@@ -88,7 +87,6 @@
                                         {{ $product->variants_count }} {{ \Illuminate\Support\Str::plural('variant', $product->variants_count) }}
                                     </a>
                                 </td>
-                                <td>{{ number_format((float) $product->price, 2) }}</td>
                                 <td>
                                     <span class="{{ $product->is_active ? 'status--process' : 'status--denied' }}">
                                         {{ $product->is_active ? 'Active' : 'Inactive' }}
@@ -110,7 +108,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center py-4">No products found.</td>
+                                <td colspan="7" class="text-center py-4">No products found.</td>
                             </tr>
                         @endforelse
                     </tbody>

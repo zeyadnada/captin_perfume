@@ -3,6 +3,7 @@
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -27,10 +28,8 @@ it('creates a product', function () {
         'sku' => 'per-1001',
         'short_description' => 'A warm amber fragrance.',
         'description' => 'Amber, vanilla and sandalwood.',
-        'price' => 125.50,
-        'compare_at_price' => 150.00,
         'is_active' => 1,
-    ])->assertRedirect(route('admin.products.index'));
+    ])->assertRedirect(route('admin.products.show', Product::query()->where('slug', 'amber-nights')->firstOrFail()));
 
     $this->assertDatabaseHas('products', [
         'name' => 'Amber Nights',
@@ -47,12 +46,18 @@ it('shows all product details', function () {
         'sku' => 'PER-DETAILS',
         'description' => 'Amber, vanilla and sandalwood.',
     ]);
+    ProductVariant::factory()->for($product)->create([
+        'price' => 99.99,
+        'compare_at_price' => 125.00,
+    ]);
 
     $this->get(route('admin.products.show', $product))
         ->assertOk()
         ->assertSee('Amber Nights')
         ->assertSee('PER-DETAILS')
-        ->assertSee('Amber, vanilla and sandalwood.');
+        ->assertSee('Amber, vanilla and sandalwood.')
+        ->assertSee('99.99')
+        ->assertSee('125.00');
 });
 
 it('updates a product', function () {
@@ -66,27 +71,10 @@ it('updates a product', function () {
         'sku' => 'PER-UPDATE',
         'short_description' => null,
         'description' => null,
-        'price' => 99.99,
-        'compare_at_price' => null,
         'is_active' => 1,
-    ])->assertRedirect(route('admin.products.index'));
+    ])->assertRedirect(route('admin.products.show', $product));
 
     expect($product->fresh()->name)->toBe('Nocturne');
-});
-
-it('rejects a compare-at price below the price', function () {
-    $product = Product::factory()->create();
-
-    $this->put(route('admin.products.update', $product), [
-        'brand_id' => $product->brand_id,
-        'category_id' => $product->category_id,
-        'name' => $product->name,
-        'slug' => $product->slug,
-        'sku' => $product->sku,
-        'price' => 150,
-        'compare_at_price' => 100,
-        'is_active' => 1,
-    ])->assertSessionHasErrors('compare_at_price');
 });
 
 it('soft deletes a product', function () {

@@ -58,9 +58,9 @@ Verification:
 
 ### Phase 2 - Product Management
 
-- Added the `products` migration with brand and category relationships, naming/slug/SKU fields, descriptions, pricing, active status, and soft deletion.
+- Added the `products` migration with brand and category relationships, naming/slug/SKU fields, descriptions, active status, and soft deletion.
 - Added the `Product` model, factory, and Brand/Category product relationships.
-- Added create and update Form Requests with slug/SKU normalization, unique constraints, and pricing validation.
+- Added create and update Form Requests with slug/SKU normalization and unique constraints.
 - Added product CRUD, search, brand/category/status filtering, and pagination.
 - Added CoolAdmin product index, show, create, and edit Blade views and sidebar navigation.
 - Added Product feature tests.

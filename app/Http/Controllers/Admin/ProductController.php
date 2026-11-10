@@ -50,9 +50,9 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request): RedirectResponse
     {
-        Product::create($request->validated());
+        $product = Product::create($request->validated());
 
-        return to_route('admin.products.index')->with('success', 'Product created successfully.');
+        return to_route('admin.products.show', $product)->with('success', 'Product created successfully.');
     }
 
     public function show(Product $product): View
@@ -81,7 +81,7 @@ class ProductController extends Controller
     {
         $product->update($request->validated());
 
-        return to_route('admin.products.index')->with('success', 'Product updated successfully.');
+        return to_route('admin.products.show', $product)->with('success', 'Product updated successfully.');
     }
 
     public function destroy(Product $product): RedirectResponse

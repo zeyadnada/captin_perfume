@@ -20,8 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('reference_id')->nullable();
             $table->timestamps();
 
-            $table->index(['reference_type', 'reference_id']);
-            $table->index(['product_variant_stock_id', 'created_at']);
+            $table->index(['reference_type', 'reference_id'], 'stock_movements_reference_index');
+            $table->index(['product_variant_stock_id', 'created_at'], 'stock_movements_stock_created_index');
         });
 
         $timestamp = now();

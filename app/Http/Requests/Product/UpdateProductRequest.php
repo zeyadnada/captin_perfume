@@ -36,8 +36,6 @@ class UpdateProductRequest extends FormRequest
             'sku' => ['nullable', 'string', 'max:100', 'alpha_dash', Rule::unique('products', 'sku')->ignore($product)],
             'short_description' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:5000'],
-            'price' => ['required', 'decimal:0,2', 'min:0', 'max:9999999999.99'],
-            'compare_at_price' => ['nullable', 'decimal:0,2', 'min:0', 'max:9999999999.99', 'gte:price'],
             'is_active' => ['required', 'boolean'],
         ];
     }
