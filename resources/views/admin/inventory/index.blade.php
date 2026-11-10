@@ -2,6 +2,11 @@
 
 @section('content')
     <x-page-header title="Inventory" subtitle="Monitor stock levels for each product variant.">
+        <x-slot:actions>
+            <a href="{{ route('admin.stock-movements.create') }}" class="au-btn au-btn--green au-btn--small">
+                <i class="fa-solid fa-plus" aria-hidden="true"></i> Record movement
+            </a>
+        </x-slot:actions>
     </x-page-header>
 
     @if (session('success'))
@@ -43,6 +48,9 @@
                                     @endif
                                 </td>
                                 <td class="text-end">
+                                    <a href="{{ route('admin.stock-movements.create', ['variant_id' => $variant->id]) }}" class="btn btn-success btn-sm d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" aria-label="Record stock movement for {{ $variant->product->name }} {{ $variant->display_name }}">
+                                        <i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i>
+                                    </a>
                                     <a href="{{ route('admin.inventory.edit', [$variant->product, $variant]) }}" class="btn btn-warning btn-sm d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" aria-label="Edit stock for {{ $variant->product->name }} {{ $variant->display_name }}">
                                         <i class="fa-solid fa-boxes-packing" aria-hidden="true"></i>
                                     </a>

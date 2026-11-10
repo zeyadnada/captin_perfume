@@ -10,6 +10,7 @@ use App\Models\ProductVariantStock;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class InventoryController extends Controller
 {
@@ -40,11 +41,18 @@ class InventoryController extends Controller
         abort_unless($variant->product_id === $product->getKey(), 404);
 
         DB::transaction(function () use ($request, $variant): void {
+            ProductVariant::query()->lockForUpdate()->findOrFail($variant->getKey());
             $stock = $variant->stock()->lockForUpdate()->first() ?? new ProductVariantStock;
+            $reservedQuantity = (int) $request->validated('reserved_quantity');
+
+            if ($reservedQuantity > $stock->quantity) {
+                throw ValidationException::withMessages([
+                    'reserved_quantity' => 'Reserved quantity cannot exceed physical stock.',
+                ]);
+            }
 
             $stock->fill([
-                'quantity' => $request->validated('quantity'),
-                'reserved_quantity' => $request->validated('reserved_quantity'),
+                'reserved_quantity' => $reservedQuantity,
                 'low_stock_threshold' => $request->validated('low_stock_threshold'),
             ]);
 

@@ -1,5 +1,5 @@
 @php
-    $masterDataActive = request()->routeIs('admin.brands.*', 'admin.categories.*');
+    $masterDataActive = request()->routeIs('admin.brands.*', 'admin.categories.*', 'admin.products.*');
 @endphp
 
 <aside class="menu-sidebar" id="main-sidebar">
@@ -33,16 +33,19 @@
                         <li class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
                             <a href="{{ route('admin.categories.index') }}">Categories</a>
                         </li>
+                        <li class="{{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.products.index') }}">Products</a>
+                        </li>
                     </ul>
-                </li>
-                <li class="{{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.products.index') }}">
-                        <i class="fa-solid fa-bottle-droplet"></i>Products
-                    </a>
                 </li>
                 <li class="{{ request()->routeIs('admin.inventory.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.inventory.index') }}">
                         <i class="fa-solid fa-boxes-stacked"></i>Inventory
+                    </a>
+                </li>
+                <li class="{{ request()->routeIs('admin.stock-movements.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.stock-movements.index') }}">
+                        <i class="fa-solid fa-arrow-right-arrow-left"></i>Stock Movements
                     </a>
                 </li>
             </ul>

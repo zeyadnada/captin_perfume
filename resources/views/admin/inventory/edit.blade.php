@@ -1,7 +1,7 @@
-@extends('layouts.admin', ['title' => "{$product->name} {$variant->display_name} Stock"])
+@extends('layouts.admin', ['title' => "{$product->name} {$variant->display_name} Stock Settings"])
 
 @section('content')
-    <x-page-header title="Update Stock" subtitle="{{ $product->name }} - {{ $variant->display_name }}">
+    <x-page-header title="Stock Settings" subtitle="{{ $product->name }} - {{ $variant->display_name }}">
         <x-slot:actions>
             <a href="{{ route('admin.inventory.index') }}" class="au-btn btn btn-secondary au-btn--small">
                 <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to inventory
@@ -10,7 +10,7 @@
     </x-page-header>
 
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="au-card">
                 <div class="au-card-inner">
                     <form method="POST" action="{{ route('admin.inventory.update', [$product, $variant]) }}">
@@ -20,10 +20,7 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label" for="quantity">Physical quantity</label>
-                                <input id="quantity" name="quantity" type="number" min="0" class="form-control @error('quantity') is-invalid @enderror" value="{{ old('quantity', $variant->stock?->quantity ?? 0) }}" required>
-                                @error('quantity')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <input id="quantity" type="number" class="form-control" value="{{ $variant->stock?->quantity ?? 0 }}" readonly>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label" for="reserved_quantity">Reserved quantity</label>
@@ -42,10 +39,10 @@
                         </div>
 
                         <div class="alert alert-light border">
-                            Available quantity is physical quantity minus reserved quantity.
+                            Physical quantity can only be changed by recording an incoming or outgoing stock movement.
                         </div>
 
-                        <button class="au-btn au-btn--green" type="submit">Save stock</button>
+                        <button class="au-btn au-btn--green" type="submit">Save settings</button>
                         <a href="{{ route('admin.inventory.index') }}" class="au-btn btn btn-secondary">Cancel</a>
                     </form>
                 </div>

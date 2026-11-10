@@ -3,9 +3,9 @@
 ## Current Position
 
 - Roadmap phase: Phase 3 - Inventory Management
-- Current module: Stock management
-- Status: Implemented
-- Next module: Stock movements
+- Current module: Stock movements
+- Status: Implemented; runtime verification pending
+- Next module: Inventory adjustments
 
 ## Completed Work
 
@@ -100,6 +100,19 @@ Verification status:
 - Added the inventory index and stock update pages using the CoolAdmin layout.
 - Added inventory sidebar navigation.
 - Added stock feature tests and route integrity validation.
+
+### Phase 3 - Stock Movements
+
+- Added an append-only movement ledger with incoming/outgoing type, quantity, reason, resulting balance, and optional source references.
+- Existing nonzero stock balances are recorded as opening-balance movements when the ledger migration runs.
+- Added admin movement history and movement recording pages.
+- Stock balance changes and movement records are saved atomically; outgoing movements cannot use reserved stock.
+- Removed direct physical quantity editing from inventory settings so on-hand changes must be recorded as movements.
+- Added stock movement feature tests.
+
+Verification status:
+
+- Runtime test and Pint results remain pending terminal verification.
 
 ## Known Pending Items
 
