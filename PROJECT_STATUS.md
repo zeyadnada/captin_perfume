@@ -2,10 +2,10 @@
 
 ## Current Position
 
-- Roadmap phase: Phase 3 - Inventory Management
-- Current module: Stock movements
-- Status: Implemented; runtime verification pending
-- Next module: Inventory adjustments
+- Roadmap phase: Phase 4 - Localization (EN/AR)
+- Current module: Admin EN/AR localization
+- Status: Implemented
+- Next phase: Phase 5 - E-commerce Core
 
 ## Completed Work
 
@@ -114,9 +114,25 @@ Verification status:
 
 - Runtime test and Pint results remain pending terminal verification.
 
+### Phase 4 - Localization (EN/AR)
+
+- Added session-based locale switching for English (default) and Arabic.
+- Added `SetLocale` middleware, locale switch route/controller, and `available_locales` config.
+- Added `lang/en` and `lang/ar` translation files for admin UI, flash messages, pagination, and validation.
+- Wired admin Blade views, controllers, and custom validation messages to `__()` helpers.
+- Added RTL support for Arabic (`dir="rtl"`, Bootstrap RTL CSS, Cairo font, `rtl.css` overlay).
+- Added header language switcher (English / العربية).
+- Added locale feature tests.
+
+Verification:
+
+- Locale feature tests pass: 5 tests, 23 assertions.
+- Related Category and Inventory tests pass with localization: 17 tests, 52 assertions.
+- Laravel Pint formatting passes.
+
 ## Known Pending Items
 
-- Authentication.
-- Spatie Laravel Permission.
-- Admin authorization policies and middleware.
+- Authentication (Phase 1).
+- Spatie Laravel Permission (Phase 1).
+- Admin authorization policies and middleware (Phase 1).
 - Remaining Phase 2 master-data modules.
