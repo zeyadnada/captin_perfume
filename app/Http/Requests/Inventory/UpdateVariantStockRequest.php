@@ -28,7 +28,10 @@ class UpdateVariantStockRequest extends FormRequest
                 $quantity = $variant?->stock()->value('quantity') ?? 0;
 
                 if ((int) $this->input('reserved_quantity', 0) > $quantity) {
-                    $validator->errors()->add('reserved_quantity', 'Reserved quantity cannot exceed physical stock.');
+                    $validator->errors()->add(
+                        'reserved_quantity',
+                        __('admin.validation.reserved_exceeds_physical')
+                    );
                 }
             },
         ];

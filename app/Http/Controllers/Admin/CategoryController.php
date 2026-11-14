@@ -42,7 +42,7 @@ class CategoryController extends Controller
     {
         Category::create($request->validated());
 
-        return to_route('admin.categories.index')->with('success', 'Category created successfully.');
+        return to_route('admin.categories.index')->with('success', __('admin.flash.category_created'));
     }
 
     public function edit(Category $category): View
@@ -59,7 +59,7 @@ class CategoryController extends Controller
         $this->ensureParentIsNotDescendant($category, $parentId);
         $category->update($request->validated());
 
-        return to_route('admin.categories.index')->with('success', 'Category updated successfully.');
+        return to_route('admin.categories.index')->with('success', __('admin.flash.category_updated'));
     }
 
     public function destroy(Category $category): RedirectResponse
@@ -67,7 +67,7 @@ class CategoryController extends Controller
         $category->children()->update(['parent_id' => null]);
         $category->delete();
 
-        return to_route('admin.categories.index')->with('success', 'Category deleted successfully.');
+        return to_route('admin.categories.index')->with('success', __('admin.flash.category_deleted'));
     }
 
     private function ensureParentIsNotDescendant(Category $category, ?int $parentId): void
@@ -80,7 +80,9 @@ class CategoryController extends Controller
 
         while ($descendantIds->isNotEmpty()) {
             if ($descendantIds->contains($parentId)) {
-                throw ValidationException::withMessages(['parent_id' => 'A category cannot be moved under its own descendant.']);
+                throw ValidationException::withMessages([
+                    'parent_id' => __('admin.validation.category_parent_cycle'),
+                ]);
             }
 
             $descendantIds = Category::query()->whereIn('parent_id', $descendantIds)->pluck('id');

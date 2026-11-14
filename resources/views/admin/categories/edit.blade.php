@@ -1,7 +1,7 @@
-@extends('layouts.admin', ['title' => 'Edit Category'])
+@extends('layouts.admin', ['title' => __('admin.categories.edit_title')])
 
 @section('content')
-    <x-page-header title="Edit Category" subtitle="Update category details and hierarchy." />
+    <x-page-header :title="__('admin.categories.edit_title')" :subtitle="__('admin.categories.edit_subtitle')" />
 
     <div class="au-card m-b-30">
         <div class="au-card-inner">
@@ -10,7 +10,7 @@
                 'parents' => $parents,
                 'action' => route('admin.categories.update', $category),
                 'method' => 'PUT',
-                'submitLabel' => 'Update category',
+                'submitLabel' => __('admin.categories.submit_update'),
             ])
         </div>
     </div>

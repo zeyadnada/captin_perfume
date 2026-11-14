@@ -1,10 +1,10 @@
-@extends('layouts.admin', ['title' => 'Stock Movements'])
+@extends('layouts.admin', ['title' => __('admin.stock_movements.title')])
 
 @section('content')
-    <x-page-header title="Stock Movements" subtitle="Review the history of physical stock changes.">
+    <x-page-header :title="__('admin.stock_movements.title')" :subtitle="__('admin.stock_movements.index_subtitle')">
         <x-slot:actions>
             <a href="{{ route('admin.stock-movements.create') }}" class="au-btn au-btn--green au-btn--small">
-                <i class="fa-solid fa-plus" aria-hidden="true"></i> Record movement
+                <i class="fa-solid fa-plus" aria-hidden="true"></i> {{ __('admin.inventory.record_movement') }}
             </a>
         </x-slot:actions>
     </x-page-header>
@@ -12,7 +12,7 @@
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('admin.common.close') }}"></button>
         </div>
     @endif
 
@@ -22,14 +22,14 @@
                 <table class="table table-data2">
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Product</th>
-                            <th>Variant</th>
-                            <th>Direction</th>
-                            <th>Quantity</th>
-                            <th>Balance after</th>
-                            <th>Reason</th>
-                            <th>Reference</th>
+                            <th>{{ __('admin.stock_movements.date') }}</th>
+                            <th>{{ __('admin.common.product') }}</th>
+                            <th>{{ __('admin.common.variant') }}</th>
+                            <th>{{ __('admin.stock_movements.direction') }}</th>
+                            <th>{{ __('admin.common.quantity') }}</th>
+                            <th>{{ __('admin.stock_movements.balance_after') }}</th>
+                            <th>{{ __('admin.common.reason') }}</th>
+                            <th>{{ __('admin.stock_movements.reference') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,7 +40,7 @@
                                 <td>{{ $movement->stock->variant->display_name }}</td>
                                 <td>
                                     <span class="{{ $movement->type === 'in' ? 'status--process' : 'status--denied' }}">
-                                        {{ $movement->type === 'in' ? 'Incoming' : 'Outgoing' }}
+                                        {{ $movement->type === 'in' ? __('admin.stock_movements.incoming') : __('admin.stock_movements.outgoing') }}
                                     </span>
                                 </td>
                                 <td>{{ $movement->quantity }}</td>
@@ -48,15 +48,15 @@
                                 <td>{{ $movement->reason }}</td>
                                 <td>
                                     @if ($movement->reference_type)
-                                        {{ $movement->reference_type }} #{{ $movement->reference_id }}
+                                        {{ __('admin.stock_movements.reference_display', ['type' => $movement->reference_type, 'id' => $movement->reference_id]) }}
                                     @else
-                                        Not linked
+                                        {{ __('admin.stock_movements.not_linked') }}
                                     @endif
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center py-4">No stock movements recorded yet.</td>
+                                <td colspan="8" class="text-center py-4">{{ __('admin.stock_movements.empty') }}</td>
                             </tr>
                         @endforelse
                     </tbody>

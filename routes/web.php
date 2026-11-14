@@ -8,9 +8,14 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\StockMovementController;
+use App\Http\Controllers\LocaleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', DashboardController::class)->name('home');
+
+Route::get('/locale/{locale}', LocaleController::class)
+    ->whereIn('locale', array_keys(config('app.available_locales', ['en' => []])))
+    ->name('locale.switch');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');

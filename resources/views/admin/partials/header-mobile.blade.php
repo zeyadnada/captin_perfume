@@ -5,7 +5,7 @@
                 <a class="logo" href="{{ route('admin.dashboard') }}">
                     <img src="{{ asset('cooladmin/images/icon/logo.png') }}" alt="{{ config('app.name') }}">
                 </a>
-                <button class="hamburger hamburger--slider" type="button" aria-label="Toggle navigation">
+                <button class="hamburger hamburger--slider" type="button" aria-label="{{ __('admin.common.toggle_navigation') }}">
                     <span class="hamburger-box"><span class="hamburger-inner"></span></span>
                 </button>
             </div>

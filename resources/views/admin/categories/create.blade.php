@@ -1,7 +1,7 @@
-@extends('layouts.admin', ['title' => 'Add Category'])
+@extends('layouts.admin', ['title' => __('admin.categories.create_title')])
 
 @section('content')
-    <x-page-header title="Add Category" subtitle="Create a category for perfume products." />
+    <x-page-header :title="__('admin.categories.create_title')" :subtitle="__('admin.categories.create_subtitle')" />
 
     <div class="au-card m-b-30">
         <div class="au-card-inner">
@@ -10,7 +10,7 @@
                 'parents' => $parents,
                 'action' => route('admin.categories.store'),
                 'method' => 'POST',
-                'submitLabel' => 'Create category',
+                'submitLabel' => __('admin.categories.submit_create'),
             ])
         </div>
     </div>

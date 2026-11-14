@@ -55,7 +55,7 @@ class BrandController extends Controller
 
         Brand::create($data);
 
-        return to_route('admin.brands.index')->with('success', 'Brand created successfully.');
+        return to_route('admin.brands.index')->with('success', __('admin.flash.brand_created'));
     }
 
     /**
@@ -81,7 +81,7 @@ class BrandController extends Controller
 
         $brand->update($data);
 
-        return to_route('admin.brands.index')->with('success', 'Brand updated successfully.');
+        return to_route('admin.brands.index')->with('success', __('admin.flash.brand_updated'));
     }
 
     /**
@@ -91,6 +91,6 @@ class BrandController extends Controller
     {
         $brand->delete();
 
-        return to_route('admin.brands.index')->with('success', 'Brand deleted successfully.');
+        return to_route('admin.brands.index')->with('success', __('admin.flash.brand_deleted'));
     }
 }

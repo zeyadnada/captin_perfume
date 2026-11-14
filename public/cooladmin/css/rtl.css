@@ -1,0 +1,115 @@
+@charset "UTF-8";
+/* CoolAdmin RTL overlay — loaded only when locale direction is rtl. */
+
+html[dir="rtl"] body.app {
+  --m-font: "Cairo", "Segoe UI", Tahoma, Arial, sans-serif;
+  font-family: var(--m-font);
+}
+
+html[dir="rtl"] body.app .menu-sidebar {
+  left: auto !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  height: 100vh !important;
+  z-index: 1001;
+  border-right: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+html[dir="rtl"] body.app .page-container {
+  padding-left: 0;
+  padding-right: 260px;
+}
+
+/*
+ * Beat app.css ULTRA-FINAL `right: 0 !important` so the header clears the
+ * right sidebar instead of covering it full-width.
+ */
+html[dir="rtl"] body.app .header-desktop {
+  left: 0 !important;
+  right: 260px !important;
+  width: auto !important;
+  transition: right 200ms ease;
+}
+
+html[dir="rtl"] body.app .menu-sidebar .logo {
+  border-right: 0;
+  border-left: 0;
+}
+
+html[dir="rtl"] body.app .navbar-sidebar .navbar__list li a i,
+html[dir="rtl"] body.app .navbar-sidebar .navbar__list li a .fa-solid {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+/* Disclosure caret at the trailing end (left in RTL), away from the icon. */
+html[dir="rtl"] body.app .navbar-sidebar .navbar__list > li.has-sub > a.js-arrow {
+  padding-right: 12px;
+  padding-left: 32px;
+}
+
+html[dir="rtl"] body.app .navbar-sidebar .navbar__list > li.has-sub > a.js-arrow::after {
+  right: auto;
+  left: 12px;
+}
+
+/* Sub-list indent + guide rail mirrored for RTL. */
+html[dir="rtl"] body.app .navbar-sidebar .navbar__list .navbar__sub-list {
+  padding: 4px 30px 6px 0;
+}
+
+html[dir="rtl"] body.app .navbar-sidebar .navbar__list .navbar__sub-list::before {
+  left: auto;
+  right: 23px;
+}
+
+@media (min-width: 992px) {
+  html[dir="rtl"] body.app.sidebar-collapsed .page-container {
+    padding-left: 0;
+    padding-right: 72px;
+  }
+
+  html[dir="rtl"] body.app.sidebar-collapsed .header-desktop {
+    left: 0 !important;
+    right: 72px !important;
+  }
+}
+
+@media (max-width: 991.98px) {
+  html[dir="rtl"] body.app .menu-sidebar {
+    left: auto !important;
+    right: 0 !important;
+    transform: translateX(100%);
+    z-index: 1050; /* above .sidebar-backdrop (1040); desktop keeps 1001 */
+  }
+
+  html[dir="rtl"] body.app.sidebar-open .menu-sidebar {
+    transform: translateX(0);
+  }
+
+  html[dir="rtl"] body.app .page-container {
+    padding-right: 0;
+  }
+
+  html[dir="rtl"] body.app .header-desktop {
+    left: 0 !important;
+    right: 0 !important;
+  }
+}
+
+html[dir="rtl"] body.app .header-button.ms-auto {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+html[dir="rtl"] body.app .table-data2.table thead th {
+  text-align: right;
+}
+
+html[dir="rtl"] body.app .table-data2.table thead th.text-end,
+html[dir="rtl"] body.app .table-data2.table tbody td.text-end,
+html[dir="rtl"] body.app .text-end {
+  text-align: left !important;
+}

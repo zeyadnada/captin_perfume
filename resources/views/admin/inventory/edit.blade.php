@@ -1,10 +1,10 @@
-@extends('layouts.admin', ['title' => "{$product->name} {$variant->display_name} Stock Settings"])
+@extends('layouts.admin', ['title' => __('admin.inventory.settings_document_title', ['product' => $product->name, 'variant' => $variant->display_name])])
 
 @section('content')
-    <x-page-header title="Stock Settings" subtitle="{{ $product->name }} - {{ $variant->display_name }}">
+    <x-page-header :title="__('admin.inventory.settings_title')" :subtitle="__('admin.inventory.settings_subtitle', ['product' => $product->name, 'variant' => $variant->display_name])">
         <x-slot:actions>
             <a href="{{ route('admin.inventory.index') }}" class="au-btn btn btn-secondary au-btn--small">
-                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to inventory
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> {{ __('admin.inventory.back') }}
             </a>
         </x-slot:actions>
     </x-page-header>
@@ -19,18 +19,18 @@
 
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label class="form-label" for="quantity">Physical quantity</label>
+                                <label class="form-label" for="quantity">{{ __('admin.inventory.physical_quantity') }}</label>
                                 <input id="quantity" type="number" class="form-control" value="{{ $variant->stock?->quantity ?? 0 }}" readonly>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label" for="reserved_quantity">Reserved quantity</label>
+                                <label class="form-label" for="reserved_quantity">{{ __('admin.inventory.reserved_quantity') }}</label>
                                 <input id="reserved_quantity" name="reserved_quantity" type="number" min="0" class="form-control @error('reserved_quantity') is-invalid @enderror" value="{{ old('reserved_quantity', $variant->stock?->reserved_quantity ?? 0) }}" required>
                                 @error('reserved_quantity')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label" for="low_stock_threshold">Low-stock threshold</label>
+                                <label class="form-label" for="low_stock_threshold">{{ __('admin.inventory.low_stock_threshold') }}</label>
                                 <input id="low_stock_threshold" name="low_stock_threshold" type="number" min="0" class="form-control @error('low_stock_threshold') is-invalid @enderror" value="{{ old('low_stock_threshold', $variant->stock?->low_stock_threshold ?? 0) }}" required>
                                 @error('low_stock_threshold')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -39,11 +39,11 @@
                         </div>
 
                         <div class="alert alert-light border">
-                            Physical quantity can only be changed by recording an incoming or outgoing stock movement.
+                            {{ __('admin.inventory.physical_readonly_notice') }}
                         </div>
 
-                        <button class="au-btn au-btn--green" type="submit">Save settings</button>
-                        <a href="{{ route('admin.inventory.index') }}" class="au-btn btn btn-secondary">Cancel</a>
+                        <button class="au-btn au-btn--green" type="submit">{{ __('admin.inventory.save_settings') }}</button>
+                        <a href="{{ route('admin.inventory.index') }}" class="au-btn btn btn-secondary">{{ __('admin.common.cancel') }}</a>
                     </form>
                 </div>
             </div>

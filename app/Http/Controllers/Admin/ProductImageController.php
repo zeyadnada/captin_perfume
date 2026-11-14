@@ -34,7 +34,7 @@ class ProductImageController extends Controller
         }
 
         return to_route('admin.products.images.index', $product)
-            ->with('success', 'Product images uploaded successfully.');
+            ->with('success', __('admin.flash.images_uploaded'));
     }
 
     public function update(UpdateProductImageRequest $request, Product $product, ProductImage $image): RedirectResponse
@@ -43,7 +43,7 @@ class ProductImageController extends Controller
         $image->update($request->validated());
 
         return to_route('admin.products.images.index', $product)
-            ->with('success', 'Product image updated successfully.');
+            ->with('success', __('admin.flash.image_updated'));
     }
 
     public function destroy(Product $product, ProductImage $image): RedirectResponse
@@ -53,6 +53,6 @@ class ProductImageController extends Controller
         $image->delete();
 
         return to_route('admin.products.images.index', $product)
-            ->with('success', 'Product image deleted successfully.');
+            ->with('success', __('admin.flash.image_deleted'));
     }
 }
