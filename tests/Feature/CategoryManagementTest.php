@@ -1,9 +1,8 @@
 <?php
 
 use App\Models\Category;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
-uses(RefreshDatabase::class);
+beforeEach(fn () => actingAsAdmin());
 
 it('lists categories in the admin panel', function () {
     Category::factory()->create(['name' => 'Floral']);

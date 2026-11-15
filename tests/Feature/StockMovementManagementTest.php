@@ -4,9 +4,8 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\ProductVariantStock;
 use App\Models\ProductVariantStockMovement;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
-uses(RefreshDatabase::class);
+beforeEach(fn () => actingAsAdmin());
 
 it('lists stock movements with product and variant details', function () {
     $product = Product::factory()->create();
@@ -131,7 +130,7 @@ it('rejects outgoing stock that would consume reserved units', function () {
 });
 
 it('rejects an outgoing movement when no stock exists and rolls back the empty stock row', function () {
-    $product = Product::factory()->create();
+    $product = Product::factory()->create(['is_active' => true]);
     $variant = ProductVariant::factory()->for($product)->create(['is_active' => true]);
 
     $this->from(route('admin.stock-movements.create'))

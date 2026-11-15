@@ -7,9 +7,26 @@
                 </button>
                 <div class="header-button ms-auto">
                     <div class="account-wrap">
-                        <div class="account-item clearfix">
+                        <div class="account-item clearfix js-item-menu">
                             <div class="content">
-                                <span class="js-acc-btn">{{ config('app.name') }} Admin</span>
+                                <a class="js-acc-btn" href="#">{{ auth()->user()->name }}</a>
+                            </div>
+                            <div class="account-dropdown js-dropdown">
+                                <div class="info clearfix">
+                                    <div class="content">
+                                        <h5 class="name">{{ auth()->user()->name }}</h5>
+                                        <span class="email">{{ auth()->user()->email }}</span>
+                                    </div>
+                                </div>
+                                <div class="account-dropdown__footer">
+                                    <form method="post" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="account-dropdown__item border-0 bg-transparent w-100 text-start">
+                                            <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+                                            {{ __('admin.auth.logout') }}
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

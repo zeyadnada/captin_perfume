@@ -5,7 +5,7 @@ use App\Models\ProductImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
+beforeEach(fn () => actingAsAdmin());
 
 it('lists product images', function () {
     $product = Product::factory()->create();

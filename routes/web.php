@@ -8,22 +8,36 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\StockMovementController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', DashboardController::class)->name('home');
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'create'])->name('login');
+    Route::post('/login', [LoginController::class, 'store'])
+        ->middleware('throttle:5,1')
+        ->name('login.store');
+});
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
-    Route::resource('brands', BrandController::class)->except(['show']);
-    Route::resource('categories', CategoryController::class)->except(['show']);
-    Route::resource('products', ProductController::class);
-    Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
-    Route::get('/products/{product}/variants/{variant}/stock/edit', [InventoryController::class, 'edit'])->name('inventory.edit');
-    Route::put('/products/{product}/variants/{variant}/stock', [InventoryController::class, 'update'])->name('inventory.update');
-    Route::get('/stock-movements', [StockMovementController::class, 'index'])->name('stock-movements.index');
-    Route::get('/stock-movements/create', [StockMovementController::class, 'create'])->name('stock-movements.create');
-    Route::post('/stock-movements', [StockMovementController::class, 'store'])->name('stock-movements.store');
-    Route::resource('products.variants', ProductVariantController::class)->except(['show']);
-    Route::resource('products.images', ProductImageController::class)
-        ->except(['create', 'show', 'edit']);
+Route::post('/logout', [LoginController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/', DashboardController::class)->name('home');
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', DashboardController::class)->name('dashboard');
+        Route::resource('brands', BrandController::class)->except(['show']);
+        Route::resource('categories', CategoryController::class)->except(['show']);
+        Route::resource('products', ProductController::class);
+        Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
+        Route::get('/products/{product}/variants/{variant}/stock/edit', [InventoryController::class, 'edit'])->name('inventory.edit');
+        Route::put('/products/{product}/variants/{variant}/stock', [InventoryController::class, 'update'])->name('inventory.update');
+        Route::get('/stock-movements', [StockMovementController::class, 'index'])->name('stock-movements.index');
+        Route::get('/stock-movements/create', [StockMovementController::class, 'create'])->name('stock-movements.create');
+        Route::post('/stock-movements', [StockMovementController::class, 'store'])->name('stock-movements.store');
+        Route::resource('products.variants', ProductVariantController::class)->except(['show']);
+        Route::resource('products.images', ProductImageController::class)
+            ->except(['create', 'show', 'edit']);
+    });
 });

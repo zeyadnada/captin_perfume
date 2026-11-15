@@ -4,9 +4,8 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVariant;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
-uses(RefreshDatabase::class);
+beforeEach(fn () => actingAsAdmin());
 
 it('lists products in the admin panel', function () {
     $product = Product::factory()->create(['name' => 'Amber Nights']);

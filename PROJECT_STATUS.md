@@ -2,10 +2,10 @@
 
 ## Current Position
 
-- Roadmap phase: Phase 3 - Inventory Management
-- Current module: Stock movements
-- Status: Implemented; runtime verification pending
-- Next module: Inventory adjustments
+- Roadmap phase: Phase 1 pending items (Authentication done)
+- Current module: Authentication
+- Status: Implemented (50 tests passing)
+- Next pending: Spatie Laravel Permission, then admin policies/middleware
 
 ## Completed Work
 
@@ -18,8 +18,13 @@
 - Admin dashboard route and reusable admin layout added.
 - Root dashboard route added.
 - Application name and timezone configured.
+- Session-based admin authentication (login, logout, remember me).
+- CoolAdmin login page using the auth layout.
+- `auth` / `guest` middleware protecting admin routes and the login form.
+- Default admin seeder: `admin@example.com` / `password`.
+- Authentication feature tests; existing admin feature tests authenticate via `actingAs`.
 
-Authentication and Spatie permissions remain pending.
+Spatie permissions and admin authorization policies remain pending.
 
 ### Phase 2 - Brands Management
 
@@ -116,7 +121,6 @@ Verification status:
 
 ## Known Pending Items
 
-- Authentication.
 - Spatie Laravel Permission.
 - Admin authorization policies and middleware.
 - Remaining Phase 2 master-data modules.
