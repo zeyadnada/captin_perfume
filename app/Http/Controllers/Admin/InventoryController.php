@@ -47,7 +47,7 @@ class InventoryController extends Controller
 
             if ($reservedQuantity > $stock->quantity) {
                 throw ValidationException::withMessages([
-                    'reserved_quantity' => 'Reserved quantity cannot exceed physical stock.',
+                    'reserved_quantity' => __('admin.validation.reserved_exceeds_physical'),
                 ]);
             }
 
@@ -63,6 +63,6 @@ class InventoryController extends Controller
             $stock->save();
         });
 
-        return to_route('admin.inventory.index')->with('success', 'Stock updated successfully.');
+        return to_route('admin.inventory.index')->with('success', __('admin.flash.stock_updated'));
     }
 }

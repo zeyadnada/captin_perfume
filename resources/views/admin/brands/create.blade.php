@@ -1,7 +1,7 @@
-@extends('layouts.admin', ['title' => 'Add Brand'])
+@extends('layouts.admin', ['title' => __('admin.brands.create_title')])
 
 @section('content')
-    <x-page-header title="Add Brand" subtitle="Create a brand for perfume products." />
+    <x-page-header :title="__('admin.brands.create_title')" :subtitle="__('admin.brands.create_subtitle')" />
 
     <div class="au-card m-b-30">
         <div class="au-card-inner">
@@ -9,7 +9,7 @@
                 'brand' => new \App\Models\Brand(['is_active' => true]),
                 'action' => route('admin.brands.store'),
                 'method' => 'POST',
-                'submitLabel' => 'Create brand',
+                'submitLabel' => __('admin.brands.submit_create'),
             ])
         </div>
     </div>

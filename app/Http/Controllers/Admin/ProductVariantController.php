@@ -29,7 +29,7 @@ class ProductVariantController extends Controller
     {
         $product->variants()->create($request->validated());
 
-        return to_route('admin.products.variants.index', $product)->with('success', 'Product variant created successfully.');
+        return to_route('admin.products.variants.index', $product)->with('success', __('admin.flash.variant_created'));
     }
 
     public function edit(Product $product, ProductVariant $variant): View
@@ -44,7 +44,7 @@ class ProductVariantController extends Controller
         abort_unless($variant->product_id === $product->getKey(), 404);
         $variant->update($request->validated());
 
-        return to_route('admin.products.variants.index', $product)->with('success', 'Product variant updated successfully.');
+        return to_route('admin.products.variants.index', $product)->with('success', __('admin.flash.variant_updated'));
     }
 
     public function destroy(Product $product, ProductVariant $variant): RedirectResponse
@@ -52,6 +52,6 @@ class ProductVariantController extends Controller
         abort_unless($variant->product_id === $product->getKey(), 404);
         $variant->delete();
 
-        return to_route('admin.products.variants.index', $product)->with('success', 'Product variant deleted successfully.');
+        return to_route('admin.products.variants.index', $product)->with('success', __('admin.flash.variant_deleted'));
     }
 }

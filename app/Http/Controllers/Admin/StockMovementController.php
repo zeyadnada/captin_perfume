@@ -74,13 +74,13 @@ class StockMovementController extends Controller
 
             if ($data['type'] === 'out' && $movementQuantity > $stock->availableQuantity()) {
                 throw ValidationException::withMessages([
-                    'quantity' => 'The outgoing quantity cannot exceed available stock.',
+                    'quantity' => __('admin.validation.outgoing_exceeds_available'),
                 ]);
             }
 
             if ($newQuantity > self::MAX_STOCK_QUANTITY) {
                 throw ValidationException::withMessages([
-                    'quantity' => 'The resulting stock quantity exceeds the maximum supported value.',
+                    'quantity' => __('admin.validation.stock_exceeds_maximum'),
                 ]);
             }
 
@@ -97,6 +97,6 @@ class StockMovementController extends Controller
             ]);
         });
 
-        return to_route('admin.stock-movements.index')->with('success', 'Stock movement recorded successfully.');
+        return to_route('admin.stock-movements.index')->with('success', __('admin.flash.stock_movement_recorded'));
     }
 }

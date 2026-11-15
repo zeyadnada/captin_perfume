@@ -134,30 +134,35 @@ Follow this roadmap in order. Do not jump to future phases unless explicitly req
 ### Phase 3 – Inventory Management
 - Stock management.
 - Stock movements.
-- Inventory adjustments.
 
-### Phase 4 – E-commerce Core
+### Phase 4 – Localization (EN/AR)
+- Admin UI translations (English and Arabic).
+- Locale switching and session locale persistence.
+- RTL layout support for Arabic.
+- Translated validation and flash messages.
+
+### Phase 5 – E-commerce Core
 - Customer accounts.
 - Product catalog.
 - Shopping cart.
 - Checkout.
 - Customer addresses.
 
-### Phase 5 – Orders and Payments
+### Phase 6 – Orders and Payments
 - Order management.
 - Order items.
 - Order status management.
 - Payment methods and integration.
 - Shipping and delivery management.
 
-### Phase 6 – Advanced Features
+### Phase 7 – Advanced Features
 - Coupons and discounts.
 - Product reviews.
 - Notifications.
 - Reports and analytics.
 - API development.
 
-### Phase 7 – Quality and Deployment
+### Phase 8 – Quality and Deployment
 - Security review.
 - Query optimization.
 - Caching and queues.

@@ -22,11 +22,11 @@ class StoreProductImageRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'images.required' => 'Please upload at least one image.',
-            'images.*.required' => 'Each image is required.',
-            'images.*.image' => 'Each file must be an image.',
-            'images.*.mimes' => 'Each image must be a file of type: jpg, jpeg, png, webp.',
-            'images.*.max' => 'Each image may not be greater than :max kilobytes.',
+            'images.required' => __('admin.validation.images_required'),
+            'images.*.required' => __('admin.validation.images_each_required'),
+            'images.*.image' => __('admin.validation.images_each_image'),
+            'images.*.mimes' => __('admin.validation.images_each_mimes'),
+            'images.*.max' => __('admin.validation.images_each_max'),
         ];
     }
 }

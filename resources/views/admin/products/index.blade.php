@@ -1,10 +1,10 @@
-@extends('layouts.admin', ['title' => 'Products'])
+@extends('layouts.admin', ['title' => __('admin.products.title')])
 
 @section('content')
-    <x-page-header title="Products" subtitle="Manage the store perfume catalog.">
+    <x-page-header :title="__('admin.products.title')" :subtitle="__('admin.products.index_subtitle')">
         <x-slot:actions>
             <a href="{{ route('admin.products.create') }}" class="au-btn au-btn--green au-btn--small">
-                <i class="fa-solid fa-plus" aria-hidden="true"></i> Add product
+                <i class="fa-solid fa-plus" aria-hidden="true"></i> {{ __('admin.products.add') }}
             </a>
         </x-slot:actions>
     </x-page-header>
@@ -12,7 +12,7 @@
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('admin.common.close') }}"></button>
         </div>
     @endif
 
@@ -20,40 +20,40 @@
         <div class="au-card-inner">
             <form method="GET" action="{{ route('admin.products.index') }}" class="row g-3 align-items-end mb-4 p-3 rounded bg-light">
                 <div class="col-md-3">
-                    <label class="form-label" for="search">Search</label>
-                    <input class="au-input" id="search" name="search" value="{{ request('search') }}" placeholder="Name, slug or SKU">
+                    <label class="form-label" for="search">{{ __('admin.common.search') }}</label>
+                    <input class="au-input" id="search" name="search" value="{{ request('search') }}" placeholder="{{ __('admin.common.search_name_slug_sku') }}">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label" for="brand_id">Brand</label>
+                    <label class="form-label" for="brand_id">{{ __('admin.common.brand') }}</label>
                     <select class="au-input" id="brand_id" name="brand_id">
-                        <option value="">All brands</option>
+                        <option value="">{{ __('admin.products.all_brands') }}</option>
                         @foreach ($brands as $brand)
                             <option value="{{ $brand->id }}" @selected((string) request('brand_id') === (string) $brand->id)>{{ $brand->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label" for="category_id">Category</label>
+                    <label class="form-label" for="category_id">{{ __('admin.common.category') }}</label>
                     <select class="au-input" id="category_id" name="category_id">
-                        <option value="">All categories</option>
+                        <option value="">{{ __('admin.products.all_categories') }}</option>
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}" @selected((string) request('category_id') === (string) $category->id)>{{ $category->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label" for="status">Status</label>
+                    <label class="form-label" for="status">{{ __('admin.common.status') }}</label>
                     <select class="au-input" id="status" name="status">
-                        <option value="">All statuses</option>
-                        <option value="1" @selected(request('status') === '1')>Active</option>
-                        <option value="0" @selected(request('status') === '0')>Inactive</option>
+                        <option value="">{{ __('admin.common.all_statuses') }}</option>
+                        <option value="1" @selected(request('status') === '1')>{{ __('admin.common.active') }}</option>
+                        <option value="0" @selected(request('status') === '0')>{{ __('admin.common.inactive') }}</option>
                     </select>
                 </div>
                 <div class="col-md-2 d-flex align-items-end gap-2">
                     <button class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1 px-3" type="submit">
-                        <i class="fa-solid fa-filter" aria-hidden="true"></i> Filter
+                        <i class="fa-solid fa-filter" aria-hidden="true"></i> {{ __('admin.common.filter') }}
                     </button>
-                    <a href="{{ route('admin.products.index') }}" class="btn btn-outline-secondary btn-sm" aria-label="Reset filters">
+                    <a href="{{ route('admin.products.index') }}" class="btn btn-outline-secondary btn-sm" aria-label="{{ __('admin.common.reset_filters') }}">
                         <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
                     </a>
                 </div>
@@ -64,12 +64,12 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Product</th>
-                            <th>Brand</th>
-                            <th>Category</th>
-                            <th>Variants</th>
-                            <th>Status</th>
-                            <th class="text-end">Actions</th>
+                            <th>{{ __('admin.common.product') }}</th>
+                            <th>{{ __('admin.common.brand') }}</th>
+                            <th>{{ __('admin.common.category') }}</th>
+                            <th>{{ __('admin.common.variants') }}</th>
+                            <th>{{ __('admin.common.status') }}</th>
+                            <th class="text-end">{{ __('admin.common.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,23 +84,23 @@
                                 <td>{{ $product->category->name }}</td>
                                 <td>
                                     <a href="{{ route('admin.products.variants.index', $product) }}" class="badge bg-secondary text-decoration-none">
-                                        {{ $product->variants_count }} {{ \Illuminate\Support\Str::plural('variant', $product->variants_count) }}
+                                        {{ trans_choice('admin.products.variant_count', $product->variants_count, ['count' => $product->variants_count]) }}
                                     </a>
                                 </td>
                                 <td>
                                     <span class="{{ $product->is_active ? 'status--process' : 'status--denied' }}">
-                                        {{ $product->is_active ? 'Active' : 'Inactive' }}
+                                        {{ $product->is_active ? __('admin.common.active') : __('admin.common.inactive') }}
                                     </span>
                                 </td>
                                 <td class="text-end">
                                     <div class="table-data-feature">
-                                        <a href="{{ route('admin.products.show', $product) }}" class="btn btn-secondary btn-sm d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" aria-label="View {{ $product->name }}">
+                                        <a href="{{ route('admin.products.show', $product) }}" class="btn btn-secondary btn-sm d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" aria-label="{{ __('admin.common.view_named', ['name' => $product->name]) }}">
                                             <i class="fa-solid fa-eye" aria-hidden="true"></i>
                                         </a>
-                                        <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-warning btn-sm d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" aria-label="Edit {{ $product->name }}">
+                                        <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-warning btn-sm d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" aria-label="{{ __('admin.common.edit_named', ['name' => $product->name]) }}">
                                             <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
                                         </a>
-                                        <button class="btn btn-danger btn-sm delete-product-trigger d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" type="button" data-product-name="{{ $product->name }}" data-delete-url="{{ route('admin.products.destroy', $product) }}" aria-label="Delete {{ $product->name }}">
+                                        <button class="btn btn-danger btn-sm delete-product-trigger d-inline-flex align-items-center justify-content-center p-0" style="width: 34px; height: 34px;" type="button" data-product-name="{{ $product->name }}" data-confirm-text="{{ __('admin.common.confirm_delete_named', ['name' => $product->name]) }}" data-delete-url="{{ route('admin.products.destroy', $product) }}" aria-label="{{ __('admin.common.delete_named', ['name' => $product->name]) }}">
                                             <i class="fa-solid fa-trash" aria-hidden="true"></i>
                                         </button>
                                     </div>
@@ -108,7 +108,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center py-4">No products found.</td>
+                                <td colspan="7" class="text-center py-4">{{ __('admin.products.empty') }}</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -129,11 +129,11 @@
             document.querySelectorAll('.delete-product-trigger').forEach(button => {
                 button.addEventListener('click', async () => {
                     const { isConfirmed } = await Swal.fire({
-                        title: 'Delete product?',
-                        text: `Delete "${button.dataset.productName}"?`,
+                        title: @json(__('admin.products.confirm_delete_title')),
+                        text: button.dataset.confirmText,
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonText: 'Delete',
+                        confirmButtonText: @json(__('admin.common.confirm_delete_button')),
                         confirmButtonColor: '#dc3545'
                     });
 
