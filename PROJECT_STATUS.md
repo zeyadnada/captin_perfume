@@ -2,10 +2,10 @@
 
 ## Current Position
 
-- Roadmap phase: Phase 4 - Localization (EN/AR)
-- Current module: Admin EN/AR localization
+- Roadmap phase: Phase 4 complete; Phase 1 Authentication complete
+- Current modules: Localization (EN/AR) + Authentication
 - Status: Implemented
-- Next phase: Phase 5 - E-commerce Core
+- Next pending: Spatie Laravel Permission, then admin policies/middleware, then Phase 5 - E-commerce Core
 
 ## Completed Work
 
@@ -18,8 +18,13 @@
 - Admin dashboard route and reusable admin layout added.
 - Root dashboard route added.
 - Application name and timezone configured.
+- Session-based admin authentication (login, logout, remember me).
+- CoolAdmin login page using the auth layout.
+- `auth` / `guest` middleware protecting admin routes and the login form.
+- Default admin seeder: `admin@example.com` / `password`.
+- Authentication feature tests; existing admin feature tests authenticate via `actingAs`.
 
-Authentication and Spatie permissions remain pending.
+Spatie permissions and admin authorization policies remain pending.
 
 ### Phase 2 - Brands Management
 
@@ -132,7 +137,6 @@ Verification:
 
 ## Known Pending Items
 
-- Authentication (Phase 1).
 - Spatie Laravel Permission (Phase 1).
 - Admin authorization policies and middleware (Phase 1).
 - Remaining Phase 2 master-data modules.

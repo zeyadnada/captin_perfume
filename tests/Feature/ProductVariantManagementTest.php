@@ -2,9 +2,8 @@
 
 use App\Models\Product;
 use App\Models\ProductVariant;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
-uses(RefreshDatabase::class);
+beforeEach(fn () => actingAsAdmin());
 
 it('lists variants for a product', function () {
     $product = Product::factory()->create();

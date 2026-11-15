@@ -3,9 +3,8 @@
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\ProductVariantStock;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
-uses(RefreshDatabase::class);
+beforeEach(fn () => actingAsAdmin());
 
 it('lists variants with zero stock when no stock record exists', function () {
     $product = Product::factory()->create(['is_active' => true]);

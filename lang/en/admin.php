@@ -244,4 +244,18 @@ return [
         'stock_exceeds_maximum' => 'The resulting stock quantity exceeds the maximum supported value.',
         'category_parent_cycle' => 'A category cannot be moved under its own descendant.',
     ],
+
+    'auth' => [
+        'title' => 'Sign in',
+        'welcome' => 'Welcome back',
+        'subtitle' => 'Sign in to continue to your dashboard.',
+        'email' => 'Email address',
+        'email_placeholder' => 'you@example.com',
+        'password' => 'Password',
+        'remember' => 'Remember me',
+        'submit' => 'Sign in',
+        'logout' => 'Sign out',
+        'account_menu' => 'Account menu',
+        'home_aria' => ':app home',
+    ],
 ];

@@ -8,7 +8,9 @@ Study guide based on [`PROJECT_STATUS.md`](PROJECT_STATUS.md) and what exists in
 
 **Tasks:** Inspect Laravel app, MySQL config, CoolAdmin assets under `public/cooladmin`, admin/auth Blade layouts, dashboard routes, app name/timezone.
 
-**Still pending (not practiced yet):** Auth login/guards, Spatie Permission, Policies/Gates.
+**Authentication (done):** Session login/logout, remember me, protect admin routes, CoolAdmin login page, seeded admin user.
+
+**Still pending:** Spatie Permission, Policies/Gates.
 
 ### Topics
 
@@ -16,6 +18,9 @@ Study guide based on [`PROJECT_STATUS.md`](PROJECT_STATUS.md) and what exists in
 - **Public assets** — CoolAdmin CSS/JS/fonts served from `public/`, referenced with `asset()`.
 - **Named routes + route groups** — `prefix('admin')->name('admin.')` keeps URLs and names organized.
 - **Invokable controllers** — Single-action controllers (dashboard) with `__invoke`.
+- **Session authentication** — `web` guard stores the logged-in user id in the session.
+- **`auth` / `guest` middleware** — Guests cannot open admin pages; logged-in users skip the login form.
+- **Session regenerate on login** — Prevents session fixation after `Auth::attempt`.
 
 ### Key functions
 
@@ -25,6 +30,11 @@ Study guide based on [`PROJECT_STATUS.md`](PROJECT_STATUS.md) and what exists in
 | `view('admin.x', $data)` | View name + array | Renders Blade HTML |
 | `asset('cooladmin/...')` | Path under `public/` | Public URL to CSS/JS/images |
 | `config('app.name')` | Config key | Value from `config/*.php` |
+| `Auth::attempt($credentials, $remember)` | email/password array + remember bool | `true` if login succeeds; starts session |
+| `$request->session()->regenerate()` | — | New session id after login |
+| `Auth::logout()` | — | Clears authenticated user from session |
+| `$this->actingAs($user)` | User model | Fakes login in tests |
+| `redirectGuestsTo(fn () => route('login'))` | Closure returning URL | Where `auth` middleware sends guests |
 
 ---
 
@@ -256,11 +266,12 @@ flowchart TD
 
 ## Suggested study order (if re-reading code)
 
-1. Brands CRUD + Form Request + `Str::slug` + Storage
-2. Categories hierarchy + `ValidationException` cycle check
-3. Nested variants/images + `abort_unless` + `getKey()`
-4. Inventory `DB::transaction` + `lockForUpdate` + `fill()`
-5. Stock movements ledger inside the same transaction
-6. Locale middleware vs switch route
+1. Auth login/logout + `Auth::attempt` + `auth`/`guest` middleware + `actingAs`
+2. Brands CRUD + Form Request + `Str::slug` + Storage
+3. Categories hierarchy + `ValidationException` cycle check
+4. Nested variants/images + `abort_unless` + `getKey()`
+5. Inventory `DB::transaction` + `lockForUpdate` + `fill()`
+6. Stock movements ledger inside the same transaction
+7. Locale middleware vs switch route
 
 **Not used yet (later phases / pending Phase 1):** Policies, Gates, Spatie roles, Events/Listeners, Jobs/Queues, API Sanctum, PHP Enums classes (volume unit is still `Rule::in`, not an Enum).
