@@ -1574,25 +1574,34 @@ body.app .account-dropdown__body {
 }
 
 body.app .account-dropdown__item a,
-body.app .account-dropdown__footer a {
+body.app .account-dropdown__footer a,
+body.app .account-dropdown__footer button {
   display: flex;
   align-items: center;
   gap: 12px;
+  width: 100%;
   padding: 9px 16px;
+  border: 0;
+  background: transparent;
   font-size: 13.5px;
+  font-family: inherit;
+  text-align: start;
   color: var(--m-text);
   text-decoration: none;
+  cursor: pointer;
   transition: background 120ms ease;
 }
 
 body.app .account-dropdown__item a:hover,
-body.app .account-dropdown__footer a:hover {
+body.app .account-dropdown__footer a:hover,
+body.app .account-dropdown__footer button:hover {
   background: var(--m-surface-2);
   color: var(--m-text);
 }
 
 body.app .account-dropdown__item a i,
-body.app .account-dropdown__footer a i {
+body.app .account-dropdown__footer a i,
+body.app .account-dropdown__footer button i {
   width: 16px;
   margin-right: 0; /* override legacy 20px */
   font-size: 13px;
@@ -1604,11 +1613,13 @@ body.app .account-dropdown__footer {
   background: var(--m-surface-2);
 }
 
-body.app .account-dropdown__footer a {
+body.app .account-dropdown__footer a,
+body.app .account-dropdown__footer button {
   color: var(--m-danger);
 }
 
-body.app .account-dropdown__footer a i {
+body.app .account-dropdown__footer a i,
+body.app .account-dropdown__footer button i {
   color: var(--m-danger);
 }
 
@@ -1720,6 +1731,10 @@ body.app .account-item {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+body.app .account-item:not(:has(> .image)) {
+  padding-left: 12px;
 }
 
 body.app .account-item .image {

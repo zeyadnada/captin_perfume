@@ -11,6 +11,7 @@ return [
         'remember' => 'Remember me',
         'submit' => 'Sign in',
         'logout' => 'Sign out',
+        'account_menu' => 'Account menu',
         'home_aria' => ':app home',
     ],
 ];
