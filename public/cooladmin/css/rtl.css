@@ -104,6 +104,13 @@ html[dir="rtl"] body.app .header-button.ms-auto {
   margin-right: auto !important;
 }
 
+/* Account menu sits on the left in RTL; flip the panel so it opens inward. */
+html[dir="rtl"] body.app .account-dropdown {
+  right: auto;
+  left: 0;
+  transform-origin: left top;
+}
+
 html[dir="rtl"] body.app .table-data2.table thead th {
   text-align: right;
 }

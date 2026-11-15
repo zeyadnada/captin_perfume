@@ -27,11 +27,17 @@
                             aria-haspopup="true"
                             aria-label="{{ __('admin.auth.account_menu') }}"
                         >
+                            <div class="image">
+                                <img src="{{ asset('cooladmin/images/icon/avatar-7.jpg') }}" alt="{{ auth()->user()->name }}">
+                            </div>
                             <div class="content">
                                 <a class="js-acc-btn" href="#">{{ auth()->user()->name }}</a>
                             </div>
                             <div class="account-dropdown js-dropdown">
                                 <div class="info clearfix">
+                                    <div class="image">
+                                        <img src="{{ asset('cooladmin/images/icon/avatar-7.jpg') }}" alt="{{ auth()->user()->name }}">
+                                    </div>
                                     <div class="content">
                                         <h5 class="name">
                                             <a href="#">{{ auth()->user()->name }}</a>
