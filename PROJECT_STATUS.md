@@ -2,8 +2,8 @@
 
 ## Current Position
 
-- Roadmap phase: Phase 4 complete; Phase 1 Authorization complete
-- Current modules: Localization (EN/AR) + Authentication + Roles/Permissions + Policies
+- Roadmap phase: Phase 4 complete; Phase 1 Administration (Users/Roles) complete
+- Current modules: Localization (EN/AR) + Authentication + Roles/Permissions + Policies + Users/Roles admin
 - Status: Implemented
 - Next pending: Remaining Phase 2 master-data modules, then Phase 5 - E-commerce Core
 
@@ -27,14 +27,20 @@
 - Permission tables migrated; `HasRoles` on the User model.
 - `Permission` and `Role` enums plus `RolePermissionSeeder` (admin role with full catalog).
 - Default admin user assigned the `admin` role.
-- Spatie middleware aliases registered; admin routes guarded with `auth` + `role:admin`.
+- Spatie middleware aliases registered; admin routes guarded with `auth` + `staff` (user must have at least one role).
 - Role/permission feature tests; `actingAsAdmin()` assigns the admin role.
 - Admin Policies for Brand, Category, Product, ProductVariant, ProductImage, stock, and stock movements.
 - Form Request `authorize()` and controller `$this->authorize()` wired to Policies / Spatie permissions.
 - Sidebar nav items gated with `@can` / permission checks.
 - `actingAsAdminWithout()` helper and admin authorization feature tests.
+- Administration section (Users + Roles CRUD) above Master Data in the sidebar.
+- User and Role policies, Form Requests, CoolAdmin views, EN/AR strings.
+- Dual roles: `super_admin` (all permissions) and `admin` (all except Users/Roles).
+- Seeded `admin@example.com` is `super_admin`; system-role safety protects `super_admin`.
+- Nullable `phone` on users (admin create/edit/index).
+- Users/Roles feature tests.
 
-Phase 1 authentication and authorization are complete.
+Phase 1 authentication, authorization, and staff administration are complete.
 
 ### Phase 2 - Brands Management
 

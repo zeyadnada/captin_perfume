@@ -18,14 +18,15 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolePermissionSeeder::class);
 
-        $admin = User::query()->updateOrCreate(
-            ['email' => 'admin@example.com'],
+        $superAdmin = User::query()->updateOrCreate(
+            ['email' => 'super@example.com'],
             [
-                'name' => 'Admin',
+                'name' => 'Super Admin',
                 'password' => 'password',
+                'phone' => null,
             ],
         );
 
-        $admin->assignRole(RoleEnum::Admin);
+        $superAdmin->syncRoles([RoleEnum::SuperAdmin]);
     }
 }

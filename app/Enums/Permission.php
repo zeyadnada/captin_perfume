@@ -30,11 +30,36 @@ enum Permission: string
     case StockMovementsView = 'stock-movements.view';
     case StockMovementsCreate = 'stock-movements.create';
 
+    case UsersView = 'users.view';
+    case UsersCreate = 'users.create';
+    case UsersUpdate = 'users.update';
+    case UsersDelete = 'users.delete';
+
+    case RolesView = 'roles.view';
+    case RolesCreate = 'roles.create';
+    case RolesUpdate = 'roles.update';
+    case RolesDelete = 'roles.delete';
+
     /**
      * @return list<string>
      */
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
+    }
+
+    /**
+     * @return array<string, list<self>>
+     */
+    public static function groupedByModule(): array
+    {
+        $groups = [];
+
+        foreach (self::cases() as $permission) {
+            $module = explode('.', $permission->value)[0];
+            $groups[$module][] = $permission;
+        }
+
+        return $groups;
     }
 }

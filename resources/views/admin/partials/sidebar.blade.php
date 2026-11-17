@@ -4,8 +4,14 @@
     use App\Models\Product;
     use App\Models\ProductVariantStock;
     use App\Models\ProductVariantStockMovement;
+    use App\Models\User;
+    use Spatie\Permission\Models\Role;
 
+    $administrationActive = request()->routeIs('admin.users.*', 'admin.roles.*');
     $masterDataActive = request()->routeIs('admin.brands.*', 'admin.categories.*', 'admin.products.*');
+    $canViewUsers = auth()->user()?->can('viewAny', User::class);
+    $canViewRoles = auth()->user()?->can('viewAny', Role::class);
+    $showAdministration = $canViewUsers || $canViewRoles;
     $canViewBrands = auth()->user()?->can('viewAny', Brand::class);
     $canViewCategories = auth()->user()?->can('viewAny', Category::class);
     $canViewProducts = auth()->user()?->can('viewAny', Product::class);
@@ -32,6 +38,26 @@
                         </a>
                     </li>
                 @endcan
+
+                @if ($showAdministration)
+                    <li class="has-sub {{ $administrationActive ? 'active' : '' }}">
+                        <a class="js-arrow {{ $administrationActive ? 'open' : '' }}" href="#" @if ($administrationActive) aria-expanded="true" @endif>
+                            <i class="fa-solid fa-user-shield"></i>{{ __('admin.nav.administration') }}
+                        </a>
+                        <ul class="list-unstyled navbar__sub-list js-sub-list" @if ($administrationActive) style="display: block;" @endif>
+                            @if ($canViewUsers)
+                                <li class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.users.index') }}">{{ __('admin.nav.users') }}</a>
+                                </li>
+                            @endif
+                            @if ($canViewRoles)
+                                <li class="{{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.roles.index') }}">{{ __('admin.nav.roles') }}</a>
+                                </li>
+                            @endif
+                        </ul>
+                    </li>
+                @endif
 
                 @if ($showMasterData)
                     <li class="has-sub {{ $masterDataActive ? 'active' : '' }}">

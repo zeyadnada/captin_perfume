@@ -4,6 +4,17 @@ use App\Enums\Role as RoleEnum;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 
+it('allows a super_admin role user to access the admin dashboard', function () {
+    $this->seed(RolePermissionSeeder::class);
+
+    $superAdmin = User::factory()->create();
+    $superAdmin->assignRole(RoleEnum::SuperAdmin);
+
+    $this->actingAs($superAdmin)
+        ->get(route('admin.dashboard'))
+        ->assertOk();
+});
+
 it('allows an admin role user to access the admin dashboard', function () {
     $this->seed(RolePermissionSeeder::class);
 
@@ -15,7 +26,7 @@ it('allows an admin role user to access the admin dashboard', function () {
         ->assertOk();
 });
 
-it('forbids an authenticated user without the admin role from the admin dashboard', function () {
+it('forbids an authenticated user without any staff role from the admin dashboard', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
@@ -23,7 +34,7 @@ it('forbids an authenticated user without the admin role from the admin dashboar
         ->assertForbidden();
 });
 
-it('forbids an authenticated user without the admin role from brand management', function () {
+it('forbids an authenticated user without any staff role from brand management', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
@@ -31,7 +42,17 @@ it('forbids an authenticated user without the admin role from brand management',
         ->assertForbidden();
 });
 
-it('seeds the admin role with the expected permissions', function () {
+it('seeds the super_admin role with administration permissions', function () {
+    $this->seed(RolePermissionSeeder::class);
+
+    $superAdmin = User::factory()->create();
+    $superAdmin->assignRole(RoleEnum::SuperAdmin);
+
+    expect($superAdmin->can('users.view'))->toBeTrue()
+        ->and($superAdmin->can('roles.create'))->toBeTrue();
+});
+
+it('seeds the admin role without administration permissions', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
@@ -41,5 +62,26 @@ it('seeds the admin role with the expected permissions', function () {
         ->and($admin->can('dashboard.view'))->toBeTrue()
         ->and($admin->can('brands.create'))->toBeTrue()
         ->and($admin->can('products.variants.manage'))->toBeTrue()
-        ->and($admin->can('stock-movements.create'))->toBeTrue();
+        ->and($admin->can('stock-movements.create'))->toBeTrue()
+        ->and($admin->can('users.view'))->toBeFalse()
+        ->and($admin->can('roles.view'))->toBeFalse();
+});
+
+it('forbids the admin role from the administration section', function () {
+    $this->seed(RolePermissionSeeder::class);
+
+    $admin = User::factory()->create();
+    $admin->assignRole(RoleEnum::Admin);
+
+    $this->actingAs($admin)
+        ->get(route('admin.users.index'))
+        ->assertForbidden();
+
+    $this->actingAs($admin)
+        ->get(route('admin.roles.index'))
+        ->assertForbidden();
+
+    $this->actingAs($admin)
+        ->get(route('admin.brands.index'))
+        ->assertOk();
 });

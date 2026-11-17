@@ -8,11 +8,47 @@ Study guide based on [`PROJECT_STATUS.md`](PROJECT_STATUS.md) and what exists in
 
 **Tasks:** Inspect Laravel app, MySQL config, CoolAdmin assets under `public/cooladmin`, admin/auth Blade layouts, dashboard routes, app name/timezone.
 
-**Authentication (done):** Session login/logout, remember me, protect admin routes, CoolAdmin login page, seeded admin user.
+**Authentication (done):** Session login/logout, remember me, CoolAdmin login page, seeded `admin@example.com`.
 
-**Spatie Permission (done):** Roles/permissions package, admin role + permission catalog, `role:admin` middleware on admin routes.
+**Authorization (done):** Layered staff access — Spatie roles/permissions, `staff` middleware, Policies, Form Request + controller `authorize()`, sidebar `@can`, Users/Roles admin UI.
 
-**Policies (done):** Model Policies backed by Spatie permissions; Form Request + controller authorize; sidebar `@can`.
+### How authorization works in this app
+
+```mermaid
+flowchart TD
+  Request[HTTP request] --> AuthMw["auth middleware"]
+  AuthMw --> StaffMw["staff middleware: user has at least one role"]
+  StaffMw --> FormAuth["FormRequest authorize via Policy"]
+  StaffMw --> CtrlAuth["Controller authorize for GET/destroy"]
+  FormAuth --> Policy[Model Policy]
+  CtrlAuth --> Policy
+  Policy --> SpatieCheck["hasPermissionTo Permission enum"]
+```
+
+1. **`auth`** — must be logged in.
+2. **`staff` (`EnsureUserIsStaff`)** — must have **at least one** Spatie role (customers later will have none → blocked from admin).
+3. **Policies** — fine-grained: e.g. `BrandPolicy::create` checks `brands.create`.
+4. **Wiring**
+   - Form Requests: `$this->user()?->can('create', Brand::class)`
+   - Controllers (index/create/edit/show/destroy): `$this->authorize(...)`
+   - Dashboard: `$this->authorize(Permission::DashboardView->value)` (Spatie registers permission names with Gate)
+5. **Sidebar** — `@can` / `can('viewAny', …)` hides links the user cannot use.
+
+**Roles (seeded):**
+
+| Role | Access |
+|------|--------|
+| `super_admin` | All permissions, including Administration (Users/Roles). Protected system role. Seeded user gets this. |
+| `admin` | All permissions **except** `users.*` and `roles.*`. |
+
+Each staff user has **exactly one role** in the UI (`role_id` select + `syncRoles([$name])`). Spatie still stores roles via pivot; we simply assign one.
+
+**Permission catalog:** backed enum `App\Enums\Permission` → seeded in `RolePermissionSeeder`. Policies call `$user->hasPermissionTo(Permission::…)` (not `$user->can()` inside the policy) to avoid Gate recursion.
+
+**Spatie `Role` model policy:** `Gate::policy(Role::class, RolePolicy::class)` in `AppServiceProvider` because `Spatie\Permission\Models\Role` is not under `App\Models`, so auto-discovery does not apply. `UserPolicy` auto-discovers normally.
+
+**Why both `staff` and Policies?**  
+`staff` = may enter the admin area. Policies = which modules/actions that staff member may use. Ready for limited roles without opening admin to every logged-in user.
 
 ### Topics
 
@@ -23,6 +59,11 @@ Study guide based on [`PROJECT_STATUS.md`](PROJECT_STATUS.md) and what exists in
 - **Session authentication** — `web` guard stores the logged-in user id in the session.
 - **`auth` / `guest` middleware** — Guests cannot open admin pages; logged-in users skip the login form.
 - **Session regenerate on login** — Prevents session fixation after `Auth::attempt`.
+- **Spatie roles & permissions** — Roles group permissions; `$user->hasPermissionTo()` / `$user->can()` check access.
+- **Laravel Policies** — Map abilities (`viewAny`, `create`, `update`, `delete`) to permission checks.
+- **`AuthorizesRequests`** — On base `Controller` so `$this->authorize()` works.
+- **Form Request `authorize()`** — Second gate after validation class is resolved (before `rules()` run for writes).
+- **Blade `@can`** — UX only; real enforcement is middleware + Policies.
 
 ### Key functions
 
@@ -37,6 +78,13 @@ Study guide based on [`PROJECT_STATUS.md`](PROJECT_STATUS.md) and what exists in
 | `Auth::logout()` | — | Clears authenticated user from session |
 | `$this->actingAs($user)` | User model | Fakes login in tests |
 | `redirectGuestsTo(fn () => route('login'))` | Closure returning URL | Where `auth` middleware sends guests |
+| `$user->assignRole` / `syncRoles` | Role name(s) | Attach role(s); `syncRoles` replaces the set |
+| `$user->hasPermissionTo($permission)` | Permission enum/string | `true` if role grants that permission |
+| `$user->can('create', Brand::class)` | Ability + model/class | Runs matching Policy method via Gate |
+| `$this->authorize('update', $brand)` | Ability + model | Aborts 403 if Policy denies |
+| `Gate::policy(Role::class, RolePolicy::class)` | Model class + Policy class | Manual Policy map for non-`App\Models` types |
+| `@can('viewAny', Brand::class)` | Ability + model/class | Shows Blade block only if allowed |
+| `actingAsAdmin()` / `actingAsAdminWithout(...)` | Optional Permission enums | Test helpers: seed roles, login as `super_admin` (optionally revoke perms) |
 
 ---
 
@@ -254,7 +302,7 @@ Sets `reserved_quantity` / `low_stock_threshold` in one call respecting fillable
 
 ```mermaid
 flowchart TD
-    formSubmit[Admin_form_submit] --> formRequest[Form_Request_validation]
+    formSubmit[Admin_form_submit] --> formRequest[Form_Request_authorize_then_validation]
     formRequest --> controller[Controller]
     controller --> simpleCrud[create_update_delete]
     controller --> businessRule[ValidationException_domain_rules]
@@ -262,6 +310,8 @@ flowchart TD
     inventoryWrite --> fillSave[fill_and_save_or_relation_create]
     everyRequest[Every_web_request] --> setLocale[SetLocale_middleware]
     setLocale --> underscore["__()_translations"]
+    adminRoute[Admin_route] --> authStaff["auth_plus_staff"]
+    authStaff --> policies[Policy_checks]
 ```
 
 ---
@@ -269,11 +319,14 @@ flowchart TD
 ## Suggested study order (if re-reading code)
 
 1. Auth login/logout + `Auth::attempt` + `auth`/`guest` middleware + `actingAs`
-2. Brands CRUD + Form Request + `Str::slug` + Storage
-3. Categories hierarchy + `ValidationException` cycle check
-4. Nested variants/images + `abort_unless` + `getKey()`
-5. Inventory `DB::transaction` + `lockForUpdate` + `fill()`
-6. Stock movements ledger inside the same transaction
-7. Locale middleware vs switch route
+2. Spatie seed (`RolePermissionSeeder`) + `Permission`/`Role` enums + `staff` middleware
+3. One Policy (e.g. `BrandPolicy`) + Form Request `authorize()` + controller `$this->authorize()`
+4. Users/Roles admin + single `role_id` + `super_admin` vs `admin` permission split
+5. Brands CRUD + Form Request + `Str::slug` + Storage
+6. Categories hierarchy + `ValidationException` cycle check
+7. Nested variants/images + `abort_unless` + `getKey()`
+8. Inventory `DB::transaction` + `lockForUpdate` + `fill()`
+9. Stock movements ledger inside the same transaction
+10. Locale middleware vs switch route
 
-**Not used yet (later phases):** Events/Listeners, Jobs/Queues, API Sanctum. Volume unit is still `Rule::in` (not an Enum); `Permission` / `Role` enums exist for Spatie; Policies map abilities to those permissions.
+**Not used yet (later phases):** Events/Listeners, Jobs/Queues, API Sanctum. Volume unit is still `Rule::in` (not an Enum).

@@ -14,14 +14,14 @@ pest()->extend(TestCase::class)
     ->in('Feature');
 
 /**
- * Authenticate as a fresh admin user for protected route tests.
+ * Authenticate as a fresh super_admin user for protected route tests.
  */
 function actingAsAdmin(): User
 {
     test()->seed(RolePermissionSeeder::class);
 
     $user = User::factory()->create();
-    $user->assignRole(RoleEnum::Admin);
+    $user->assignRole(RoleEnum::SuperAdmin);
 
     test()->actingAs($user);
 
@@ -29,13 +29,13 @@ function actingAsAdmin(): User
 }
 
 /**
- * Authenticate as an admin with one or more role permissions revoked.
+ * Authenticate as a super_admin with one or more role permissions revoked.
  */
 function actingAsAdminWithout(Permission ...$permissions): User
 {
     $user = actingAsAdmin();
 
-    $role = Role::findByName(RoleEnum::Admin->value, 'web');
+    $role = Role::findByName(RoleEnum::SuperAdmin->value, 'web');
     $role->revokePermissionTo(
         array_map(fn (Permission $permission) => $permission->value, $permissions),
     );

@@ -19,12 +19,31 @@ class RolePermissionSeeder extends Seeder
         $registrar = app()[PermissionRegistrar::class];
         $registrar->forgetCachedPermissions();
 
-        $permissions = collect(PermissionEnum::values())
-            ->map(fn (string $name) => Permission::findOrCreate($name, 'web'));
+        foreach (PermissionEnum::values() as $permission) {
+            Permission::findOrCreate($permission, 'web');
+        }
 
         $registrar->forgetCachedPermissions();
 
+        $allPermissions = PermissionEnum::values();
+
+        $administrationPermissions = [
+            PermissionEnum::UsersView->value,
+            PermissionEnum::UsersCreate->value,
+            PermissionEnum::UsersUpdate->value,
+            PermissionEnum::UsersDelete->value,
+            PermissionEnum::RolesView->value,
+            PermissionEnum::RolesCreate->value,
+            PermissionEnum::RolesUpdate->value,
+            PermissionEnum::RolesDelete->value,
+        ];
+
+        $adminPermissions = array_values(array_diff($allPermissions, $administrationPermissions));
+
+        $superAdmin = Role::findOrCreate(RoleEnum::SuperAdmin->value, 'web');
+        $superAdmin->syncPermissions($allPermissions);
+
         $admin = Role::findOrCreate(RoleEnum::Admin->value, 'web');
-        $admin->syncPermissions($permissions);
+        $admin->syncPermissions($adminPermissions);
     }
 }
