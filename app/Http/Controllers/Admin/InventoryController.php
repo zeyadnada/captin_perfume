@@ -16,6 +16,8 @@ class InventoryController extends Controller
 {
     public function index(): View
     {
+        $this->authorize('viewAny', ProductVariantStock::class);
+
         return view('admin.inventory.index', [
             'variants' => ProductVariant::query()
                 ->with(['product:id,name,slug', 'stock'])
@@ -29,6 +31,9 @@ class InventoryController extends Controller
     public function edit(Product $product, ProductVariant $variant): View
     {
         abort_unless($variant->product_id === $product->getKey(), 404);
+
+        $stock = $variant->stock ?? new ProductVariantStock;
+        $this->authorize('update', $stock);
 
         return view('admin.inventory.edit', [
             'product' => $product,

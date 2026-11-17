@@ -18,6 +18,8 @@ class BrandController extends Controller
      */
     public function index(Request $request): View
     {
+        $this->authorize('viewAny', Brand::class);
+
         $brands = Brand::query()
             ->when($request->string('search')->trim()->value(), function ($query, string $search): void {
                 $query->where(function ($query) use ($search): void {
@@ -38,6 +40,8 @@ class BrandController extends Controller
      */
     public function create(): View
     {
+        $this->authorize('create', Brand::class);
+
         return view('admin.brands.create');
     }
 
@@ -63,6 +67,8 @@ class BrandController extends Controller
      */
     public function edit(Brand $brand): View
     {
+        $this->authorize('update', $brand);
+
         return view('admin.brands.edit', compact('brand'));
     }
 
@@ -89,6 +95,8 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand): RedirectResponse
     {
+        $this->authorize('delete', $brand);
+
         $brand->delete();
 
         return to_route('admin.brands.index')->with('success', __('admin.flash.brand_deleted'));

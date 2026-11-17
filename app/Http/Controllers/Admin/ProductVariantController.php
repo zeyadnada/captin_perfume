@@ -14,6 +14,8 @@ class ProductVariantController extends Controller
 {
     public function index(Product $product): View
     {
+        $this->authorize('viewAny', ProductVariant::class);
+
         return view('admin.products.variants.index', [
             'product' => $product,
             'variants' => $product->variants()->latest()->paginate(15),
@@ -22,6 +24,8 @@ class ProductVariantController extends Controller
 
     public function create(Product $product): View
     {
+        $this->authorize('create', ProductVariant::class);
+
         return view('admin.products.variants.create', compact('product'));
     }
 
@@ -35,6 +39,7 @@ class ProductVariantController extends Controller
     public function edit(Product $product, ProductVariant $variant): View
     {
         abort_unless($variant->product_id === $product->getKey(), 404);
+        $this->authorize('update', $variant);
 
         return view('admin.products.variants.edit', compact('product', 'variant'));
     }
@@ -50,6 +55,8 @@ class ProductVariantController extends Controller
     public function destroy(Product $product, ProductVariant $variant): RedirectResponse
     {
         abort_unless($variant->product_id === $product->getKey(), 404);
+        $this->authorize('delete', $variant);
+
         $variant->delete();
 
         return to_route('admin.products.variants.index', $product)->with('success', __('admin.flash.variant_deleted'));

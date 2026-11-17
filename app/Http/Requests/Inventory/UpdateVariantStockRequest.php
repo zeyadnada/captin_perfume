@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Inventory;
 
+use App\Models\ProductVariantStock;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -9,7 +10,9 @@ class UpdateVariantStockRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        $stock = $this->route('variant')?->stock ?? new ProductVariantStock;
+
+        return $this->user()?->can('update', $stock) ?? false;
     }
 
     public function rules(): array

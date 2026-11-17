@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\ProductVariant;
 
+use App\Models\ProductVariant;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
@@ -11,7 +12,7 @@ class StoreProductVariantRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->can('create', ProductVariant::class) ?? false;
     }
 
     protected function prepareForValidation(): void

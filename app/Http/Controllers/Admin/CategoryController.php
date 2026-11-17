@@ -15,6 +15,8 @@ class CategoryController extends Controller
 {
     public function index(Request $request): View
     {
+        $this->authorize('viewAny', Category::class);
+
         $categories = Category::query()
             ->with('parent:id,name')
             ->when($request->string('search')->trim()->value(), function ($query, string $search): void {
@@ -33,6 +35,8 @@ class CategoryController extends Controller
 
     public function create(): View
     {
+        $this->authorize('create', Category::class);
+
         return view('admin.categories.create', [
             'parents' => Category::query()->active()->orderBy('name')->get(),
         ]);
@@ -47,6 +51,8 @@ class CategoryController extends Controller
 
     public function edit(Category $category): View
     {
+        $this->authorize('update', $category);
+
         return view('admin.categories.edit', [
             'category' => $category,
             'parents' => Category::query()->whereKeyNot($category->getKey())->active()->orderBy('name')->get(),
@@ -64,6 +70,8 @@ class CategoryController extends Controller
 
     public function destroy(Category $category): RedirectResponse
     {
+        $this->authorize('delete', $category);
+
         $category->children()->update(['parent_id' => null]);
         $category->delete();
 

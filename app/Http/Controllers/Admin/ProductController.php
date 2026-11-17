@@ -16,6 +16,8 @@ class ProductController extends Controller
 {
     public function index(Request $request): View
     {
+        $this->authorize('viewAny', Product::class);
+
         $products = Product::query()
             ->with(['brand:id,name', 'category:id,name'])
             ->withCount('variants')
@@ -42,6 +44,8 @@ class ProductController extends Controller
 
     public function create(): View
     {
+        $this->authorize('create', Product::class);
+
         return view('admin.products.create', [
             'brands' => Brand::query()->active()->orderBy('name')->get(),
             'categories' => Category::query()->active()->orderBy('name')->get(),
@@ -57,6 +61,8 @@ class ProductController extends Controller
 
     public function show(Product $product): View
     {
+        $this->authorize('view', $product);
+
         $product->load([
             'brand:id,name,slug,logo',
             'category:id,name,slug',
@@ -70,6 +76,8 @@ class ProductController extends Controller
 
     public function edit(Product $product): View
     {
+        $this->authorize('update', $product);
+
         return view('admin.products.edit', [
             'product' => $product,
             'brands' => Brand::query()->active()->orderBy('name')->get(),
@@ -86,6 +94,8 @@ class ProductController extends Controller
 
     public function destroy(Product $product): RedirectResponse
     {
+        $this->authorize('delete', $product);
+
         $product->delete();
 
         return to_route('admin.products.index')->with('success', __('admin.flash.product_deleted'));

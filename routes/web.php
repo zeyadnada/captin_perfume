@@ -27,7 +27,7 @@ Route::post('/logout', [LoginController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/', DashboardController::class)->name('home');
 
     Route::prefix('admin')->name('admin.')->group(function () {

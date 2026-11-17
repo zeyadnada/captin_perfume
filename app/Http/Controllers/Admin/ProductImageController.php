@@ -15,6 +15,8 @@ class ProductImageController extends Controller
 {
     public function index(Product $product): View
     {
+        $this->authorize('viewAny', ProductImage::class);
+
         return view('admin.products.images.index', [
             'product' => $product,
             'images' => $product->images()->get(),
@@ -49,6 +51,8 @@ class ProductImageController extends Controller
     public function destroy(Product $product, ProductImage $image): RedirectResponse
     {
         abort_unless($image->product_id === $product->getKey(), 404);
+        $this->authorize('delete', $image);
+
         Storage::disk('public')->delete($image->path);
         $image->delete();
 

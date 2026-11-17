@@ -5,6 +5,10 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\ProductVariantStock;
 
+beforeEach(function () {
+    actingAsAdmin();
+});
+
 it('defaults the admin dashboard to english', function () {
     $this->get(route('admin.dashboard'))
         ->assertOk()

@@ -8,7 +8,7 @@ class UpdateProductImageRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->can('update', $this->route('image')) ?? false;
     }
 
     public function rules(): array

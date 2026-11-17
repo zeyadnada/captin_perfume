@@ -10,7 +10,9 @@ Study guide based on [`PROJECT_STATUS.md`](PROJECT_STATUS.md) and what exists in
 
 **Authentication (done):** Session login/logout, remember me, protect admin routes, CoolAdmin login page, seeded admin user.
 
-**Still pending:** Spatie Permission, Policies/Gates.
+**Spatie Permission (done):** Roles/permissions package, admin role + permission catalog, `role:admin` middleware on admin routes.
+
+**Policies (done):** Model Policies backed by Spatie permissions; Form Request + controller authorize; sidebar `@can`.
 
 ### Topics
 
@@ -274,4 +276,4 @@ flowchart TD
 6. Stock movements ledger inside the same transaction
 7. Locale middleware vs switch route
 
-**Not used yet (later phases / pending Phase 1):** Policies, Gates, Spatie roles, Events/Listeners, Jobs/Queues, API Sanctum, PHP Enums classes (volume unit is still `Rule::in`, not an Enum).
+**Not used yet (later phases):** Events/Listeners, Jobs/Queues, API Sanctum. Volume unit is still `Rule::in` (not an Enum); `Permission` / `Role` enums exist for Spatie; Policies map abilities to those permissions.

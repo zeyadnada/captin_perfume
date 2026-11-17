@@ -18,6 +18,8 @@ class StockMovementController extends Controller
 
     public function index(): View
     {
+        $this->authorize('viewAny', ProductVariantStockMovement::class);
+
         return view('admin.stock-movements.index', [
             'movements' => ProductVariantStockMovement::query()
                 ->with([
@@ -31,6 +33,8 @@ class StockMovementController extends Controller
 
     public function create(): View
     {
+        $this->authorize('create', ProductVariantStockMovement::class);
+
         return view('admin.stock-movements.create', [
             'variants' => ProductVariant::query()
                 ->with('product:id,name')

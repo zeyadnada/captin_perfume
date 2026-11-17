@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Brand;
 
+use App\Models\Brand;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
@@ -13,7 +14,7 @@ class StoreBrandRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->can('create', Brand::class) ?? false;
     }
 
     protected function prepareForValidation(): void

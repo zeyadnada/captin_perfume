@@ -2,10 +2,10 @@
 
 ## Current Position
 
-- Roadmap phase: Phase 4 complete; Phase 1 Authentication complete
-- Current modules: Localization (EN/AR) + Authentication
+- Roadmap phase: Phase 4 complete; Phase 1 Authorization complete
+- Current modules: Localization (EN/AR) + Authentication + Roles/Permissions + Policies
 - Status: Implemented
-- Next pending: Spatie Laravel Permission, then admin policies/middleware, then Phase 5 - E-commerce Core
+- Next pending: Remaining Phase 2 master-data modules, then Phase 5 - E-commerce Core
 
 ## Completed Work
 
@@ -23,8 +23,18 @@
 - `auth` / `guest` middleware protecting admin routes and the login form.
 - Default admin seeder: `admin@example.com` / `password`.
 - Authentication feature tests; existing admin feature tests authenticate via `actingAs`.
+- Spatie Laravel Permission installed (`spatie/laravel-permission`).
+- Permission tables migrated; `HasRoles` on the User model.
+- `Permission` and `Role` enums plus `RolePermissionSeeder` (admin role with full catalog).
+- Default admin user assigned the `admin` role.
+- Spatie middleware aliases registered; admin routes guarded with `auth` + `role:admin`.
+- Role/permission feature tests; `actingAsAdmin()` assigns the admin role.
+- Admin Policies for Brand, Category, Product, ProductVariant, ProductImage, stock, and stock movements.
+- Form Request `authorize()` and controller `$this->authorize()` wired to Policies / Spatie permissions.
+- Sidebar nav items gated with `@can` / permission checks.
+- `actingAsAdminWithout()` helper and admin authorization feature tests.
 
-Spatie permissions and admin authorization policies remain pending.
+Phase 1 authentication and authorization are complete.
 
 ### Phase 2 - Brands Management
 
@@ -137,6 +147,5 @@ Verification:
 
 ## Known Pending Items
 
-- Spatie Laravel Permission (Phase 1).
-- Admin authorization policies and middleware (Phase 1).
 - Remaining Phase 2 master-data modules.
+- Phase 5 - E-commerce Core.

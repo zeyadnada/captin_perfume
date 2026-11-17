@@ -1,5 +1,15 @@
 @php
+    use App\Models\Brand;
+    use App\Models\Category;
+    use App\Models\Product;
+    use App\Models\ProductVariantStock;
+    use App\Models\ProductVariantStockMovement;
+
     $masterDataActive = request()->routeIs('admin.brands.*', 'admin.categories.*', 'admin.products.*');
+    $canViewBrands = auth()->user()?->can('viewAny', Brand::class);
+    $canViewCategories = auth()->user()?->can('viewAny', Category::class);
+    $canViewProducts = auth()->user()?->can('viewAny', Product::class);
+    $showMasterData = $canViewBrands || $canViewCategories || $canViewProducts;
 @endphp
 
 <aside class="menu-sidebar" id="main-sidebar">
@@ -15,39 +25,56 @@
     <div class="menu-sidebar__content js-scrollbar1">
         <nav class="navbar-sidebar">
             <ul class="list-unstyled navbar__list">
-                <li class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                    <a href="{{ route('admin.dashboard') }}" @if (request()->routeIs('admin.dashboard')) aria-current="page" @endif>
-                        <i class="fa-solid fa-gauge-high"></i>{{ __('admin.nav.dashboard') }}
-                    </a>
-                </li>
-                <li class="has-sub {{ $masterDataActive ? 'active' : '' }}">
-                    <a class="js-arrow {{ $masterDataActive ? 'open' : '' }}" href="#" @if ($masterDataActive) aria-expanded="true" @endif>
-                        <i class="fa-solid fa-layer-group"></i>{{ __('admin.nav.master_data') }}
-                    </a>
-                    <ul class="list-unstyled navbar__sub-list js-sub-list" @if ($masterDataActive) style="display: block;" @endif>
-                        <li class="{{ request()->routeIs('admin.brands.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.brands.index') }}" >
-                                {{ __('admin.nav.brands') }}
-                            </a>
-                        </li>
-                        <li class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.categories.index') }}">{{ __('admin.nav.categories') }}</a>
-                        </li>
-                        <li class="{{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.products.index') }}">{{ __('admin.nav.products') }}</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="{{ request()->routeIs('admin.inventory.*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.inventory.index') }}">
-                        <i class="fa-solid fa-boxes-stacked"></i>{{ __('admin.nav.inventory') }}
-                    </a>
-                </li>
-                <li class="{{ request()->routeIs('admin.stock-movements.*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.stock-movements.index') }}">
-                        <i class="fa-solid fa-arrow-right-arrow-left"></i>{{ __('admin.nav.stock_movements') }}
-                    </a>
-                </li>
+                @can(\App\Enums\Permission::DashboardView->value)
+                    <li class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                        <a href="{{ route('admin.dashboard') }}" @if (request()->routeIs('admin.dashboard')) aria-current="page" @endif>
+                            <i class="fa-solid fa-gauge-high"></i>{{ __('admin.nav.dashboard') }}
+                        </a>
+                    </li>
+                @endcan
+
+                @if ($showMasterData)
+                    <li class="has-sub {{ $masterDataActive ? 'active' : '' }}">
+                        <a class="js-arrow {{ $masterDataActive ? 'open' : '' }}" href="#" @if ($masterDataActive) aria-expanded="true" @endif>
+                            <i class="fa-solid fa-layer-group"></i>{{ __('admin.nav.master_data') }}
+                        </a>
+                        <ul class="list-unstyled navbar__sub-list js-sub-list" @if ($masterDataActive) style="display: block;" @endif>
+                            @if ($canViewBrands)
+                                <li class="{{ request()->routeIs('admin.brands.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.brands.index') }}">
+                                        {{ __('admin.nav.brands') }}
+                                    </a>
+                                </li>
+                            @endif
+                            @if ($canViewCategories)
+                                <li class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.categories.index') }}">{{ __('admin.nav.categories') }}</a>
+                                </li>
+                            @endif
+                            @if ($canViewProducts)
+                                <li class="{{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.products.index') }}">{{ __('admin.nav.products') }}</a>
+                                </li>
+                            @endif
+                        </ul>
+                    </li>
+                @endif
+
+                @can('viewAny', ProductVariantStock::class)
+                    <li class="{{ request()->routeIs('admin.inventory.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.inventory.index') }}">
+                            <i class="fa-solid fa-boxes-stacked"></i>{{ __('admin.nav.inventory') }}
+                        </a>
+                    </li>
+                @endcan
+
+                @can('viewAny', ProductVariantStockMovement::class)
+                    <li class="{{ request()->routeIs('admin.stock-movements.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.stock-movements.index') }}">
+                            <i class="fa-solid fa-arrow-right-arrow-left"></i>{{ __('admin.nav.stock_movements') }}
+                        </a>
+                    </li>
+                @endcan
             </ul>
         </nav>
     </div>
