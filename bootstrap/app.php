@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureUserIsStaff;
 use App\Http\Middleware\SetLocale;
+use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -26,10 +27,20 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,
         ]);
-        $middleware->redirectGuestsTo(fn (): string => route('login'));
-        $middleware->redirectUsersTo(fn (): string => route('admin.dashboard'));
-    })
-    ->withExceptions(function (Exceptions $exceptions): void {
+        $middleware->redirectGuestsTo(function (Request $request): string {
+            return $request->is('admin', 'admin/*')
+                ? route('admin.login')
+                : route('login');
+        });
+        $middleware->redirectUsersTo(function (): string {
+            /** @var User|null $user */
+            $user = auth()->user();
+
+            return $user?->isStaff()
+                ? route('admin.dashboard')
+                : route('home');
+        });
+    })->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );

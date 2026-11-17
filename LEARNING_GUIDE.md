@@ -1,4 +1,4 @@
-# Phase-by-Phase Learning Guide (Phases 1–4)
+# Phase-by-Phase Learning Guide (Phases 1–5)
 
 Study guide based on [`PROJECT_STATUS.md`](PROJECT_STATUS.md) and what exists in the app today.
 
@@ -8,7 +8,7 @@ Study guide based on [`PROJECT_STATUS.md`](PROJECT_STATUS.md) and what exists in
 
 **Tasks:** Inspect Laravel app, MySQL config, CoolAdmin assets under `public/cooladmin`, admin/auth Blade layouts, dashboard routes, app name/timezone.
 
-**Authentication (done):** Session login/logout, remember me, CoolAdmin login page, seeded `admin@example.com`.
+**Authentication (done):** Session login/logout, remember me. Admin login lives at `/admin/login` (CoolAdmin). Customer login/register live on the MaleFashion storefront (Phase 5).
 
 **Authorization (done):** Layered staff access — Spatie roles/permissions, `staff` middleware, Policies, Form Request + controller `authorize()`, sidebar `@can`, Users/Roles admin UI.
 
@@ -77,7 +77,7 @@ Each staff user has **exactly one role** in the UI (`role_id` select + `syncRole
 | `$request->session()->regenerate()` | — | New session id after login |
 | `Auth::logout()` | — | Clears authenticated user from session |
 | `$this->actingAs($user)` | User model | Fakes login in tests |
-| `redirectGuestsTo(fn () => route('login'))` | Closure returning URL | Where `auth` middleware sends guests |
+| `redirectGuestsTo(fn (Request $r) => ...)` | Closure returning URL | Where `auth` middleware sends guests (admin vs storefront paths) |
 | `$user->assignRole` / `syncRoles` | Role name(s) | Attach role(s); `syncRoles` replaces the set |
 | `$user->hasPermissionTo($permission)` | Permission enum/string | `true` if role grants that permission |
 | `$user->can('create', Brand::class)` | Ability + model/class | Runs matching Policy method via Gate |
@@ -298,6 +298,72 @@ Sets `reserved_quantity` / `low_stock_threshold` in one call respecting fillable
 
 ---
 
+## Phase 5 — Customer Accounts (MaleFashion)
+
+**Tasks:** Integrate MaleFashion storefront assets/layout, public home shell, split admin vs customer auth URLs, customer register/login/logout + account profile, EN/AR storefront strings, tests.
+
+### How customer vs staff access works
+
+```mermaid
+flowchart TD
+  Guest[Guest] -->|/login /register| CustomerAuth[Storefront auth]
+  Guest -->|/admin/login| AdminAuth[CoolAdmin auth]
+  CustomerAuth --> CheckStaff{"User::isStaff?"}
+  CheckStaff -->|no roles| Account[account.show]
+  CheckStaff -->|has role| AdminDash[admin.dashboard]
+  AdminAuth --> MustStaff{"isStaff after login?"}
+  MustStaff -->|yes| AdminDash
+  MustStaff -->|no| Reject[logout plus validation error]
+  CustomerUser[Customer on /admin] --> StaffMw[staff middleware 403]
+```
+
+1. **One `users` table** — Customers and staff share `App\Models\User`. No separate customers table.
+2. **Customer = zero Spatie roles** — Registration creates a user and never calls `assignRole`.
+3. **Staff = at least one role** — `User::isStaff()` / `staff` middleware; Policies still fine-tune modules.
+4. **Split login URLs**
+   - Storefront: `/login`, `/register`, `/logout`, `/account` (MaleFashion Blade).
+   - Admin: `/admin/login`, `/admin/logout` (CoolAdmin).
+5. **Smart redirects in [`bootstrap/app.php`](bootstrap/app.php)**
+   - Guests hitting `admin*` → `admin.login`; otherwise → `login`.
+   - Authenticated users hitting guest-only pages → staff to `admin.dashboard`, customers to `home`.
+6. **Admin login rejects non-staff** — After `Auth::attempt`, if `! $user->isStaff()`, logout and throw `ValidationException` (customers cannot use the admin form).
+7. **Customer login accepts staff** — Staff who use `/login` are redirected to `admin.dashboard` (convenient, not a second account).
+
+### Topics
+
+- **Second UI template in one Laravel app** — CoolAdmin for admin, MaleFashion for storefront; separate asset trees (`public/cooladmin`, `public/malefashion`) and Blade layouts.
+- **Extracting a layout from a static HTML theme** — Copy CSS/JS/img/fonts; turn repeated header/footer into Blade partials; replace relative paths with `asset()`.
+- **Public vs protected route groups** — Home is public; account requires `auth`; admin still `auth` + `staff`.
+- **Registration without a role** — Creates a customer; admin area stays closed by design.
+- **Optional password on profile update** — `nullable` + `confirmed` + `Password::defaults()`; only hash/save when filled.
+- **`redirect()->intended(...)`** — After login, send user to the URL they originally tried (or a default).
+- **Namespaced storefront code** — Controllers under `App\Http\Controllers\Storefront`, views under `resources/views/storefront`, lang under `storefront.*`.
+- **Context-aware guest redirect** — Same `auth` middleware, different login page depending on path.
+
+### Key functions
+
+| Function | Takes | Returns / does |
+|----------|-------|----------------|
+| `$user->isStaff()` | — | `true` if user has any Spatie role |
+| `Auth::login($user)` | User model | Logs in without password (after register) |
+| `Auth::attempt($credentials, $remember)` | email/password + remember | Starts session if credentials match |
+| `redirect()->intended($defaultUrl)` | Fallback URL | Goes to session “url.intended” or fallback |
+| `Password::defaults()` | — | App-wide password rule object for validation |
+| `Rule::unique('users', 'email')->ignore($user->id)` | — | Unique email except current user on account update |
+| `$request->safe()->except(['password', ...])` | Keys to drop | Validated data without those keys |
+| `$request->filled('password')` | Field name | `true` if password was submitted non-empty |
+| `$request->is('admin', 'admin/*')` | Path patterns | `true` when current request path matches |
+| `asset('malefashion/css/style.css')` | Path under `public/` | Public URL for storefront assets |
+| `__('storefront.auth.login_title')` | Lang key | Translated storefront string |
+
+**Why not a `customer` Spatie role?**  
+Staff detection is “has any role.” Giving every shopper a `customer` role would make `staff` middleware treat them as admin-area users unless we rewrote the check. Zero roles = customer is the simplest rule and matches Phase 1 design.
+
+**Why two logout routes?**  
+Admin header posts to `admin.logout` (CoolAdmin redirect back to `/admin/login`). Storefront posts to `logout` (redirect to storefront `home`). Same session guard; different UX after logout.
+
+---
+
 ## Quick “when do I use this?” map
 
 ```mermaid
@@ -312,6 +378,9 @@ flowchart TD
     setLocale --> underscore["__()_translations"]
     adminRoute[Admin_route] --> authStaff["auth_plus_staff"]
     authStaff --> policies[Policy_checks]
+    storefrontAuth[Storefront_login_register] --> customerUser[User_with_zero_roles]
+    customerUser --> accountPage[account_show_update]
+    customerUser -->|admin_URL| staffForbidden[staff_middleware_403]
 ```
 
 ---
@@ -328,5 +397,8 @@ flowchart TD
 8. Inventory `DB::transaction` + `lockForUpdate` + `fill()`
 9. Stock movements ledger inside the same transaction
 10. Locale middleware vs switch route
+11. MaleFashion layout/partials + `public/malefashion` assets
+12. Split admin/customer auth routes + `User::isStaff()` + `redirectGuestsTo` / `redirectUsersTo`
+13. Storefront register/login/account Form Requests + optional password update
 
-**Not used yet (later phases):** Events/Listeners, Jobs/Queues, API Sanctum. Volume unit is still `Rule::in` (not an Enum).
+**Not used yet (later phases):** Events/Listeners, Jobs/Queues, API Sanctum, email verification, password reset emails. Volume unit is still `Rule::in` (not an Enum).

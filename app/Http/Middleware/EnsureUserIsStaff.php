@@ -17,7 +17,7 @@ class EnsureUserIsStaff
     {
         $user = $request->user();
 
-        if (! $user || $user->roles()->count() === 0) {
+        if (! $user || ! $user->isStaff()) {
             abort(Response::HTTP_FORBIDDEN);
         }
 

@@ -2,10 +2,10 @@
 
 ## Current Position
 
-- Roadmap phase: Phase 4 complete; Phase 1 Administration (Users/Roles) complete
-- Current modules: Localization (EN/AR) + Authentication + Roles/Permissions + Policies + Users/Roles admin
-- Status: Implemented
-- Next pending: Remaining Phase 2 master-data modules, then Phase 5 - E-commerce Core
+- Roadmap phase: Phase 5 in progress (Customer accounts complete)
+- Current modules: Admin (CoolAdmin) + Localization + MaleFashion storefront shell + Customer accounts
+- Status: Customer accounts implemented
+- Next pending: Phase 5 – Product catalog
 
 ## Completed Work
 
@@ -151,7 +151,19 @@ Verification:
 - Related Category and Inventory tests pass with localization: 17 tests, 52 assertions.
 - Laravel Pint formatting passes.
 
+### Phase 5 - Customer Accounts (MaleFashion)
+
+- Copied MaleFashion runtime assets to `public/malefashion` (css, js, img, fonts).
+- Added storefront Blade layout and partials (header, footer, offcanvas, preloader, search).
+- Public storefront home at `GET /` (placeholder hero shell).
+- Split authentication:
+  - Customer `/login`, `/register`, `/logout`, `/account` (MaleFashion-styled).
+  - Admin `/admin/login` and `/admin/logout` (CoolAdmin).
+- Customers use the shared `users` table with no Spatie roles; `User::isStaff()` gates admin access.
+- Guest redirects: admin routes → `admin.login`; storefront → `login`.
+- EN/AR `storefront` translation files for nav, auth, account, and flash messages.
+- Feature tests: admin auth updated; customer auth coverage added.
+
 ## Known Pending Items
 
-- Remaining Phase 2 master-data modules.
-- Phase 5 - E-commerce Core.
+- Phase 5 – Product catalog, shopping cart, checkout, customer addresses.

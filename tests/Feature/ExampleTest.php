@@ -1,13 +1,17 @@
 <?php
 
-it('redirects guests from home to the login page', function () {
+use App\Models\User;
+
+it('shows the storefront home to guests', function () {
     $this->get('/')
-        ->assertRedirect(route('login'));
+        ->assertOk()
+        ->assertSee(__('storefront.home.title'));
 });
 
-it('shows the dashboard to authenticated users', function () {
-    actingAsAdmin();
+it('shows the storefront home to authenticated customers', function () {
+    $user = User::factory()->create();
 
-    $this->get('/')
+    $this->actingAs($user)
+        ->get('/')
         ->assertOk();
 });

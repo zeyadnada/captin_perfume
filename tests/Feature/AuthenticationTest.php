@@ -1,30 +1,30 @@
 <?php
 
+use App\Enums\Role;
 use App\Models\User;
+use Database\Seeders\RolePermissionSeeder;
 
-it('redirects guests from the admin dashboard to login', function () {
+it('redirects guests from the admin dashboard to admin login', function () {
     $this->get(route('admin.dashboard'))
-        ->assertRedirect(route('login'));
+        ->assertRedirect(route('admin.login'));
 });
 
-it('redirects guests from the home dashboard to login', function () {
-    $this->get(route('home'))
-        ->assertRedirect(route('login'));
-});
-
-it('shows the login page to guests', function () {
-    $this->get(route('login'))
+it('shows the admin login page to guests', function () {
+    $this->get(route('admin.login'))
         ->assertOk()
         ->assertSee(__('admin.auth.welcome'));
 });
 
-it('authenticates a user with valid credentials', function () {
+it('authenticates a staff user with valid credentials', function () {
+    $this->seed(RolePermissionSeeder::class);
+
     $user = User::factory()->create([
         'email' => 'admin@example.com',
         'password' => 'password',
     ]);
+    $user->assignRole(Role::Admin);
 
-    $this->post(route('login.store'), [
+    $this->post(route('admin.login.store'), [
         'email' => 'admin@example.com',
         'password' => 'password',
     ])
@@ -33,36 +33,56 @@ it('authenticates a user with valid credentials', function () {
     $this->assertAuthenticatedAs($user);
 });
 
-it('rejects invalid credentials', function () {
+it('rejects customers from the admin login', function () {
     User::factory()->create([
-        'email' => 'admin@example.com',
+        'email' => 'customer@example.com',
         'password' => 'password',
     ]);
 
-    $this->from(route('login'))
-        ->post(route('login.store'), [
-            'email' => 'admin@example.com',
-            'password' => 'wrong-password',
+    $this->from(route('admin.login'))
+        ->post(route('admin.login.store'), [
+            'email' => 'customer@example.com',
+            'password' => 'password',
         ])
-        ->assertRedirect(route('login'))
+        ->assertRedirect(route('admin.login'))
         ->assertSessionHasErrors('email');
 
     $this->assertGuest();
 });
 
-it('logs the authenticated user out', function () {
+it('rejects invalid credentials on admin login', function () {
+    $this->seed(RolePermissionSeeder::class);
+
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+        'password' => 'password',
+    ]);
+    $user->assignRole(Role::Admin);
+
+    $this->from(route('admin.login'))
+        ->post(route('admin.login.store'), [
+            'email' => 'admin@example.com',
+            'password' => 'wrong-password',
+        ])
+        ->assertRedirect(route('admin.login'))
+        ->assertSessionHasErrors('email');
+
+    $this->assertGuest();
+});
+
+it('logs the authenticated staff user out via admin logout', function () {
     $user = actingAsAdmin();
 
-    $this->post(route('logout'))
-        ->assertRedirect(route('login'));
+    $this->post(route('admin.logout'))
+        ->assertRedirect(route('admin.login'));
 
     $this->assertGuest();
     expect($user)->not->toBeNull();
 });
 
-it('redirects authenticated users away from the login page', function () {
+it('redirects authenticated staff away from the admin login page', function () {
     actingAsAdmin();
 
-    $this->get(route('login'))
+    $this->get(route('admin.login'))
         ->assertRedirect(route('admin.dashboard'));
 });

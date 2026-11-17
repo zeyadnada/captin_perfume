@@ -46,7 +46,7 @@
                                     </div>
                                 </div>
                                 <div class="account-dropdown__footer">
-                                    <form method="post" action="{{ route('logout') }}">
+                                    <form method="post" action="{{ route('admin.logout') }}">
                                         @csrf
                                         <button type="submit">
                                             <i class="fa-solid fa-power-off" aria-hidden="true"></i>

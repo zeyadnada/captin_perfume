@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 
 @section('content')
-    <a href="{{ route('login') }}" class="auth-brand" aria-label="{{ __('admin.auth.home_aria', ['app' => config('app.name')]) }}">
+    <a href="{{ route('admin.login') }}" class="auth-brand" aria-label="{{ __('admin.auth.home_aria', ['app' => config('app.name')]) }}">
         <span class="logo-mark" aria-hidden="true">{{ strtoupper(mb_substr(config('app.name'), 0, 1)) }}</span>
         <span class="logo-text">{{ config('app.name') }}</span>
     </a>
@@ -9,7 +9,7 @@
     <h1 class="auth-title">{{ __('admin.auth.welcome') }}</h1>
     <p class="auth-subtitle">{{ __('admin.auth.subtitle') }}</p>
 
-    <form class="login-form" method="post" action="{{ route('login.store') }}">
+    <form class="login-form" method="post" action="{{ route('admin.login.store') }}">
         @csrf
 
         <div class="form-group">

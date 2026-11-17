@@ -30,4 +30,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Staff users have at least one Spatie role (customers have none).
+     */
+    public function isStaff(): bool
+    {
+        return $this->roles()->exists();
+    }
 }
