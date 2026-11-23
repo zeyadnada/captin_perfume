@@ -11,17 +11,10 @@
                                 <h6>{{ __('storefront.home.eyebrow') }}</h6>
                                 <h2>{{ __('storefront.home.title') }}</h2>
                                 <p>{{ __('storefront.home.subtitle') }}</p>
-                                @guest
-                                    <a href="{{ route('register') }}" class="primary-btn">
-                                        {{ __('storefront.home.cta') }}
-                                        <span class="arrow_right"></span>
-                                    </a>
-                                @else
-                                    <a href="{{ route('account.show') }}" class="primary-btn">
-                                        {{ __('storefront.nav.account') }}
-                                        <span class="arrow_right"></span>
-                                    </a>
-                                @endguest
+                                <a href="{{ route('shop.index') }}" class="primary-btn">
+                                    {{ __('storefront.home.cta') }}
+                                    <span class="arrow_right"></span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -35,17 +28,10 @@
                                 <h6>{{ __('storefront.home.eyebrow') }}</h6>
                                 <h2>{{ __('storefront.home.title') }}</h2>
                                 <p>{{ __('storefront.home.subtitle') }}</p>
-                                @guest
-                                    <a href="{{ route('register') }}" class="primary-btn">
-                                        {{ __('storefront.home.cta') }}
-                                        <span class="arrow_right"></span>
-                                    </a>
-                                @else
-                                    <a href="{{ route('account.show') }}" class="primary-btn">
-                                        {{ __('storefront.nav.account') }}
-                                        <span class="arrow_right"></span>
-                                    </a>
-                                @endguest
+                                <a href="{{ route('shop.index') }}" class="primary-btn">
+                                    {{ __('storefront.home.cta') }}
+                                    <span class="arrow_right"></span>
+                                </a>
                             </div>
                         </div>
                     </div>

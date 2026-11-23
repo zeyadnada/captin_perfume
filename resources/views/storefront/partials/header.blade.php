@@ -55,8 +55,8 @@
                         <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
                             <a href="{{ route('home') }}">{{ __('storefront.nav.home') }}</a>
                         </li>
-                        <li>
-                            <a href="#">{{ __('storefront.nav.shop') }}</a>
+                        <li class="{{ request()->routeIs('shop.*') ? 'active' : '' }}">
+                            <a href="{{ route('shop.index') }}">{{ __('storefront.nav.shop') }}</a>
                         </li>
                         @auth
                             <li class="{{ request()->routeIs('account.*') ? 'active' : '' }}">

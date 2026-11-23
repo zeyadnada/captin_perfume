@@ -2,10 +2,10 @@
 
 ## Current Position
 
-- Roadmap phase: Phase 5 in progress (Customer accounts complete)
-- Current modules: Admin (CoolAdmin) + Localization + MaleFashion storefront shell + Customer accounts
-- Status: Customer accounts implemented
-- Next pending: Phase 5 – Product catalog
+- Roadmap phase: Phase 5 in progress (Customer accounts + Product catalog complete)
+- Current modules: Admin (CoolAdmin) + Localization + MaleFashion storefront (accounts + catalog)
+- Status: Product catalog implemented
+- Next pending: Phase 5 – Shopping cart
 
 ## Completed Work
 
@@ -164,6 +164,17 @@ Verification:
 - EN/AR `storefront` translation files for nav, auth, account, and flash messages.
 - Feature tests: admin auth updated; customer auth coverage added.
 
+### Phase 5 - Product Catalog (MaleFashion)
+
+- Public shop listing at `GET /shop` and product detail at `GET /shop/{product:slug}`.
+- Catalog visibility: active product + active brand/category + at least one active variant (`Product::forCatalog()`).
+- Shop filters: search, brand slug, category slug, sort (latest / price / name); pagination (12).
+- MaleFashion shop index + PDP views with product card partial, gallery, volume variants, stock labels.
+- Add-to-cart UI disabled as coming soon (cart deferred to next Phase 5 task).
+- Header/footer Shop links, search overlay, and home CTA wired to the catalog.
+- EN/AR storefront `shop` and `product` translation keys.
+- Feature tests: `StorefrontCatalogTest` (5 tests, 25 assertions); Pint formatting passes.
+
 ## Known Pending Items
 
-- Phase 5 – Product catalog, shopping cart, checkout, customer addresses.
+- Phase 5 – Shopping cart, checkout, customer addresses.

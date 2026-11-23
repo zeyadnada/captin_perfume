@@ -58,7 +58,29 @@ Important instructions:
 
 The original CoolAdmin folder should remain available as a reference. Copy only the required assets into Laravel's public directory when integrating the template.
 
-## 4. Architecture and Coding Standards
+## 4. Customer-Facing Frontend Template
+
+The project contains an original frontend template named `kalles/` in the project root.
+
+This is the template which help use for the customer-facing perfume e-commerce website. note that this template allow RTL 
+
+This folder is excluded from Git tracking through `.gitignore`.
+
+Instructions:
+
+- Inspect the kalles folder before implementing the customer-facing website.
+- Understand its HTML structure, CSS, JavaScript, images, fonts, and reusable components.
+- Use this template as the design reference for the entire customer-facing website.
+- Convert its HTML pages into reusable Laravel Blade layouts and components.
+- Copy only the required assets into the appropriate Laravel public or resource directories.
+- Reuse the existing design, colors, typography, components, and responsive layouts.
+- Do not create a completely new frontend design.
+- Do not modify the original template unnecessarily.
+- Do not copy unnecessary demo files, duplicate assets, or unused libraries.
+- Keep the original StorefrontTemplate folder unchanged as a reference.
+- The original template is excluded from Git tracking.
+
+## 5. Architecture and Coding Standards
 
 Follow Laravel 13 best practices and write clean, maintainable, readable code.
 
@@ -85,7 +107,7 @@ Do not create unnecessary Repository, Service, Interface, or Factory classes jus
 
 Introduce abstractions only when they provide real benefits.
 
-## 5. Learning Objectives
+## 6. Learning Objectives
 
 This project is also a practical opportunity to improve my backend development skills.
 
@@ -111,7 +133,7 @@ When implementing something technically important:
 
 Keep explanations practical and related to the actual implementation. Avoid unnecessary theoretical lectures.
 
-## 6. Development Roadmap
+## 7. Development Roadmap
 
 Follow this roadmap in order. Do not jump to future phases unless explicitly requested.
 

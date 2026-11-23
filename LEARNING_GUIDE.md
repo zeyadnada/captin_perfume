@@ -364,6 +364,88 @@ Admin header posts to `admin.logout` (CoolAdmin redirect back to `/admin/login`)
 
 ---
 
+## Phase 5 — Product Catalog (MaleFashion)
+
+**Tasks:** Public shop listing + product detail pages, catalog visibility scopes, filters/sort/pagination, MaleFashion shop/PDP Blade, EN/AR shop strings, wire nav/search/home CTA, feature tests. No cart yet (add-to-cart UI is disabled / coming soon).
+
+### How catalog visibility works
+
+```mermaid
+flowchart TD
+  Request["GET /shop or /shop/slug"] --> ForCatalog["Product::forCatalog"]
+  ForCatalog --> ActiveProduct["product.is_active"]
+  ForCatalog --> ActiveBrand["brand.active"]
+  ForCatalog --> ActiveCategory["category.active"]
+  ForCatalog --> ActiveVariant["has active variant"]
+  ForCatalog --> ListOrShow[Index grid or PDP]
+  ListOrShow --> PriceFromVariants["min price / selected variant price"]
+  ListOrShow --> StockLabel["availableQuantity from variant stock"]
+```
+
+1. **Admin data, public read model** — No new tables. Shop reads the same `products`, `product_variants`, `product_images`, brands, categories, and stock rows the admin already manages.
+2. **`scopeForCatalog()`** — One place defines “sellable on the storefront”: active product + active brand + active category + at least one active variant.
+3. **Out of stock still listed** — Missing stock or `availableQuantity() === 0` shows an out-of-stock label; the product is not hidden (browsing stays useful).
+4. **Price lives on variants** — Cards show “from” the minimum active variant price. PDP picks a volume and updates price/stock with small client JS.
+5. **Images are product-level** — Gallery uses `asset('storage/'.$image->path)` (same as admin). Placeholder MaleFashion image if none.
+6. **Cart deferred** — PDP button is disabled with coming-soon copy so we do not half-implement Phase 5 cart.
+
+### Custom slug binding without breaking admin IDs
+
+```mermaid
+flowchart LR
+  AdminRoute["admin/products/1"] --> IdBinding["default id binding"]
+  ShopRoute["shop/ocean-breeze"] --> SlugBinding["route product:slug"]
+  UrlGen["route shop.show slug string"] --> ShopRoute
+```
+
+- Storefront routes: `GET /shop/{product:slug}` → Laravel resolves `Product` where `slug = …`.
+- Admin routes stay `{product}` → still bind by primary key.
+- **Do not** override `Product::getRouteKeyName()` to `slug`, or admin URLs would switch to slugs globally.
+- When generating shop links, pass the slug string: `route('shop.show', $product->slug)` (not only the model), so the URL is `/shop/ocean-breeze` not `/shop/1`.
+
+### Topics
+
+- **Reusable query scopes for a “channel”** — Admin lists everything (with filters); storefront always applies `forCatalog()`. Same model, different audience rules.
+- **Explicit custom route key** — `{product:slug}` on one route group only; keeps SEO URLs without changing the model’s default key.
+- **Filtering with `when` + `whereHas`** — Search on name/slug/sku/short description; brand/category filter by **slug** (public-friendly query strings), not internal ids.
+- **Sort by related aggregate** — `price_asc` / `price_desc` use `orderByRaw` with a correlated `min(product_variants.price)` subquery (only active, non-deleted variants).
+- **Eager loading for N+1** — Index loads brand, first image, active variants + stock; show loads full gallery and related products in the same category.
+- **`abort_unless` after binding** — Route may find an inactive product by slug; controller re-checks `forCatalog()` and 404s if not visible.
+- **Blade partial for cards** — `storefront/partials/product-card` shared by shop grid and related products.
+- **Theme porting (shop + shop-details)** — Reuse MaleFashion markup; drop clothing-only sidebar (size/color/tags); keep categories/brands/search/sort.
+- **Progressive UI without next feature** — Disabled add-to-cart preserves layout for the upcoming cart task.
+- **Storefront feature tests** — Factories build “catalog-ready” products (active brand/category/variant); assert hidden inactive paths and filter/PDP behavior.
+
+### Key functions
+
+| Function | Takes | Returns / does |
+|----------|-------|----------------|
+| `Product::query()->forCatalog()` | — | Query limited to storefront-visible products |
+| `ProductVariant::query()->active()` / `$q->active()` | — | Only `is_active = true` variants |
+| `whereHas('brand', fn ($q) => $q->where('slug', $slug))` | Relation + constraint | Filter products by related brand slug |
+| `$request->string('search')->trim()->value()` | — | Trimmed search string or empty |
+| `in_array($sort, [...], true)` | Value + allow-list + strict | Validates sort against known options |
+| `orderByRaw('(select min(...) from product_variants where ...)')` | SQL fragment | Sort products by cheapest active variant |
+| `paginate(12)->withQueryString()` | Per-page | Paginator that keeps `?search=&brand=` on links |
+| `abort_unless($isVisible, 404)` | Bool + status | 404 when product is not catalog-visible |
+| `whereKeyNot($product->getKey())` | Primary key | Exclude current product from related list |
+| `route('shop.show', $product->slug)` | Slug string | Public PDP URL using slug segment |
+| `$variant->stock?->availableQuantity()` | — | Sellable qty, or treat missing stock as 0 |
+| `$collection->min('price')` | Column | Lowest price among loaded variants |
+| `@selected($filters['sort'] === 'latest')` | Bool | Marks `<option>` selected in Blade |
+| `asset('storage/'.$path)` | Relative storage path | Public URL for uploaded product images |
+
+**Why `forCatalog()` instead of copying `where` clauses in index and show?**  
+One definition of “on sale publicly” prevents drift (e.g. show allowing a product that index never lists). Related products reuse the same scope.
+
+**Why filter by brand/category slug in the query string?**  
+Public URLs stay readable and stable (`?brand=maison-rose`). Admin filters can keep using ids; storefront prefers slugs for SEO and shareable links.
+
+**Why not implement add-to-cart here?**  
+Roadmap order is catalog → cart → checkout. A working button without reservation/session cart would lie to the shopper. Disabled CTA documents the next step without fake behavior.
+
+---
+
 ## Quick “when do I use this?” map
 
 ```mermaid
@@ -381,6 +463,9 @@ flowchart TD
     storefrontAuth[Storefront_login_register] --> customerUser[User_with_zero_roles]
     customerUser --> accountPage[account_show_update]
     customerUser -->|admin_URL| staffForbidden[staff_middleware_403]
+    publicShop[GET_shop] --> forCatalog[Product_forCatalog_scope]
+    forCatalog --> shopIndex[Filters_sort_paginate]
+    forCatalog --> shopShow["Slug_binding_plus_abort_unless"]
 ```
 
 ---
@@ -400,5 +485,8 @@ flowchart TD
 11. MaleFashion layout/partials + `public/malefashion` assets
 12. Split admin/customer auth routes + `User::isStaff()` + `redirectGuestsTo` / `redirectUsersTo`
 13. Storefront register/login/account Form Requests + optional password update
+14. `Product::forCatalog()` + `ProductVariant::scopeActive()` + shop filters/`when`/`whereHas`
+15. `{product:slug}` binding vs admin id binding + `route('shop.show', $slug)`
+16. Shop/PDP Blade partials + related products query + `StorefrontCatalogTest`
 
-**Not used yet (later phases):** Events/Listeners, Jobs/Queues, API Sanctum, email verification, password reset emails. Volume unit is still `Rule::in` (not an Enum).
+**Not used yet (later phases):** Shopping cart/session, checkout, customer addresses, Events/Listeners, Jobs/Queues, API Sanctum, email verification, password reset emails. Volume unit is still `Rule::in` (not an Enum).

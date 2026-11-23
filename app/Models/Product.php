@@ -38,6 +38,14 @@ class Product extends Model
         $query->where('is_active', true);
     }
 
+    public function scopeForCatalog(Builder $query): void
+    {
+        $query->active()
+            ->whereHas('brand', fn (Builder $brandQuery) => $brandQuery->active())
+            ->whereHas('category', fn (Builder $categoryQuery) => $categoryQuery->active())
+            ->whereHas('variants', fn (Builder $variantQuery) => $variantQuery->active());
+    }
+
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
@@ -57,5 +65,4 @@ class Product extends Model
     {
         return $this->hasMany(ProductImage::class)->orderBy('sort_order')->orderBy('id');
     }
-
 }

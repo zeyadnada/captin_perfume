@@ -15,7 +15,7 @@
                     <h6>{{ __('storefront.footer.shopping') }}</h6>
                     <ul>
                         <li><a href="{{ route('home') }}">{{ __('storefront.nav.home') }}</a></li>
-                        <li><a href="#">{{ __('storefront.nav.shop') }}</a></li>
+                        <li><a href="{{ route('shop.index') }}">{{ __('storefront.nav.shop') }}</a></li>
                     </ul>
                 </div>
             </div>
