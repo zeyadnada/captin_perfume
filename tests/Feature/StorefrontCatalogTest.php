@@ -3,6 +3,7 @@
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductReview;
 use App\Models\ProductVariant;
 
 function createCatalogProduct(array $productAttributes = [], array $variantAttributes = []): Product
@@ -107,6 +108,26 @@ it('hides products with inactive brand category or no active variants', function
         ->assertDontSee('No Active Variant Product');
 });
 
+it('accepts the expanded shop sort options', function () {
+    createCatalogProduct([
+        'name' => 'Alpha Perfume',
+        'slug' => 'alpha-perfume',
+        'sku' => 'AP-001',
+    ]);
+
+    foreach (['featured', 'best_selling', 'name_asc', 'name_desc', 'price_asc', 'price_desc', 'date_desc', 'date_asc'] as $sort) {
+        $this->get(route('shop.index', ['sort' => $sort]))
+            ->assertOk()
+            ->assertSee('Alpha Perfume');
+    }
+
+    $this->get(route('shop.index'))
+        ->assertOk()
+        ->assertSee(__('storefront.shop.sort.featured'))
+        ->assertSee(__('storefront.shop.sort.best_selling'))
+        ->assertSee(__('storefront.shop.sort.name_asc'));
+});
+
 it('filters the shop by search brand and category', function () {
     $matching = createCatalogProduct([
         'name' => 'Rose Elixir',
@@ -178,4 +199,42 @@ it('links the shop navigation to the catalog index', function () {
         ->assertOk()
         ->assertSee(route('shop.index'), false)
         ->assertSee(__('storefront.home.cta'));
+});
+
+it('shows the reviews tab only when approved reviews exist', function () {
+    $product = createCatalogProduct([
+        'name' => 'Reviewed Perfume',
+        'slug' => 'reviewed-perfume',
+        'sku' => 'RP-001',
+    ]);
+
+    $this->get(route('shop.show', $product->slug))
+        ->assertOk()
+        ->assertDontSee(__('storefront.product.reviews').' (', false);
+
+    ProductReview::query()->create([
+        'product_id' => $product->id,
+        'author_name' => 'Sara',
+        'rating' => 5,
+        'title' => 'Beautiful scent',
+        'body' => 'Long lasting and elegant.',
+        'is_approved' => true,
+    ]);
+
+    ProductReview::query()->create([
+        'product_id' => $product->id,
+        'author_name' => 'Hidden Reviewer',
+        'rating' => 1,
+        'title' => 'Pending',
+        'body' => 'Should not appear.',
+        'is_approved' => false,
+    ]);
+
+    $this->get(route('shop.show', $product->slug))
+        ->assertOk()
+        ->assertSee(__('storefront.product.reviews').' (1)', false)
+        ->assertSee('Beautiful scent')
+        ->assertSee('Sara')
+        ->assertDontSee('Hidden Reviewer')
+        ->assertDontSee('Should not appear.');
 });

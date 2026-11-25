@@ -15,8 +15,19 @@ class ShopController extends Controller
     public function index(Request $request): View
     {
         $sort = $request->string('sort')->toString();
-        if (! in_array($sort, ['latest', 'price_asc', 'price_desc', 'name'], true)) {
-            $sort = 'latest';
+        $allowedSorts = [
+            'featured',
+            'best_selling',
+            'name_asc',
+            'name_desc',
+            'price_asc',
+            'price_desc',
+            'date_desc',
+            'date_asc',
+        ];
+
+        if (! in_array($sort, $allowedSorts, true)) {
+            $sort = 'featured';
         }
 
         $products = Product::query()
@@ -41,7 +52,10 @@ class ShopController extends Controller
             ->when($request->string('category')->trim()->value(), function (Builder $query, string $categorySlug): void {
                 $query->whereHas('category', fn (Builder $categoryQuery) => $categoryQuery->where('slug', $categorySlug));
             })
-            ->when($sort === 'name', fn (Builder $query) => $query->orderBy('name'))
+            ->when(in_array($sort, ['featured', 'date_desc'], true), fn (Builder $query) => $query->latest())
+            ->when($sort === 'date_asc', fn (Builder $query) => $query->oldest())
+            ->when($sort === 'name_asc', fn (Builder $query) => $query->orderBy('name'))
+            ->when($sort === 'name_desc', fn (Builder $query) => $query->orderByDesc('name'))
             ->when($sort === 'price_asc', function (Builder $query): void {
                 $query->orderByRaw('(
                     select min(product_variants.price)
@@ -60,7 +74,20 @@ class ShopController extends Controller
                       and product_variants.deleted_at is null
                 ) desc');
             })
-            ->when($sort === 'latest', fn (Builder $query) => $query->latest())
+            ->when($sort === 'best_selling', function (Builder $query): void {
+                $query->orderByRaw('(
+                    select coalesce(sum(product_variant_stock_movements.quantity), 0)
+                    from product_variants
+                    inner join product_variant_stocks
+                        on product_variant_stocks.product_variant_id = product_variants.id
+                    inner join product_variant_stock_movements
+                        on product_variant_stock_movements.product_variant_stock_id = product_variant_stocks.id
+                    where product_variants.product_id = products.id
+                      and product_variants.is_active = 1
+                      and product_variants.deleted_at is null
+                      and product_variant_stock_movements.type = ?
+                ) desc', ['out']);
+            })
             ->paginate(12)
             ->withQueryString();
 
@@ -92,6 +119,7 @@ class ShopController extends Controller
             'category:id,name,slug',
             'images',
             'variants' => fn ($query) => $query->active()->with('stock')->orderBy('volume'),
+            'reviews' => fn ($query) => $query->approved()->latest(),
         ]);
 
         $relatedProducts = Product::query()
@@ -111,6 +139,7 @@ class ShopController extends Controller
             'title' => $product->name,
             'product' => $product,
             'relatedProducts' => $relatedProducts,
+            'reviews' => $product->reviews,
         ]);
     }
 }

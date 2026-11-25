@@ -446,6 +446,59 @@ Roadmap order is catalog → cart → checkout. A working button without reserva
 
 ---
 
+## Phase 5 — Kalles Storefront Redesign (Catalog UI)
+
+**Tasks:** Replace MaleFashion customer UI with curated Kalles assets; rebuild storefront layout/chrome; rebuild shop listing + PDP; restyle home/auth/account; wire Laravel locale into Kalles built-in RTL/LTR; remove `public/malefashion`. Backend catalog contracts unchanged.
+
+### How Kalles RTL/LTR is driven by Laravel
+
+```mermaid
+flowchart LR
+  LocaleSwitch["locale.switch"] --> SessionLocale["session locale"]
+  SessionLocale --> BladeLayout["layouts/storefront"]
+  BladeLayout --> HtmlDir["html dir ltr or rtl"]
+  BladeLayout --> CssPair["bootstrap + app or rtl pair"]
+  BladeLayout --> AlpineStore["laravel-store.js appStore.dir"]
+```
+
+1. **Template already supports both directions** — Kalles ships LTR and RTL CSS (`bootstrap-rtl.min.css`, `app-rtl.min.css`), `[dir="rtl"]` rules, and Alpine `store.js` stylesheet swapping.
+2. **Laravel owns the language choice** — `SetLocale` + `locale.switch` remain the control; no competing footer LTR/RTL demo toggle.
+3. **First paint is server-correct** — Blade picks the CSS pair from `config('app.available_locales.*.dir')` before Alpine runs.
+4. **`public/kalles/js/laravel-store.js`** — initializes Alpine `appStore.dir` from `data-kalles-dir` and uses Laravel `asset()` URLs (not relative `assets/css/...`).
+
+### Topics
+
+- **Curating a large HTML theme** — Copy only must-have CSS/JS/libs/fonts/images from `kalles/.../dist/assets` into `public/kalles`; leave the gitignored `kalles/` folder untouched as reference.
+- **Handlebars → Blade** — Theme partials become `layouts/storefront` + `storefront/partials/*`.
+- **Preserving backend contracts while swapping UI** — Same routes, `ShopController`, scopes, query params, and translation keys; only markup/assets change.
+- **Vendored Alpine/jQuery** — Ship as static files under `public/kalles/libs` (same idea as CoolAdmin jQuery), not new Composer/npm app deps.
+- **Volume as swatches** — Reuse Kalles size/rectangle swatch classes for perfume volumes instead of clothing colors.
+
+### Key functions / paths
+
+| Piece | Role |
+|-------|------|
+| `asset('kalles/css/app.min.css')` | Public URL for curated theme CSS |
+| `data-kalles-dir` / `laravel-store.js` | Align Alpine direction with session locale |
+| `route('shop.show', $product->slug)` | PDP URL without changing admin ID binding |
+| `topbar-product-card` | Kalles product card class used in listing + related |
+
+**Why not copy the entire Kalles tree?**  
+Most demos (blog, portfolio, niche homes) are unused weight. AGENTS.md requires copying only required assets.
+
+**Why keep MaleFashion removed from `public/`?**  
+One official storefront template avoids mixed class names and duplicate asset maintenance. Root `malefashion-master/` can remain as an ignored archive only.
+
+### Home Classic full-experience port
+
+- **Source of truth:** `kalles/HTML/HTML/dist/home-classic.html` (compiled Handlebars), not a hand-built slim hero.
+- **Shared chrome:** `top-banner` + `header2` + classic `footer` + `popup` + full `card-model` so Quick View, cart sidebar, search, and account offcanvas match the theme.
+- **Asset rewrite:** `assets/...` → `asset('kalles/...')`; watch nested quotes in CSS `url()` (use `style='... url("{{ asset(...) }}") ...'`).
+- **Locale vs demo toggle:** keep Laravel `locale.switch`; remove/disable Kalles footer LTR/RTL toggle so direction stays session-owned.
+- **Cleanup later:** blog/Instagram/demo mega menus stay until you request removal — useful to validate Flickity/Swiper/modals first.
+
+---
+
 ## Quick “when do I use this?” map
 
 ```mermaid
@@ -482,11 +535,11 @@ flowchart TD
 8. Inventory `DB::transaction` + `lockForUpdate` + `fill()`
 9. Stock movements ledger inside the same transaction
 10. Locale middleware vs switch route
-11. MaleFashion layout/partials + `public/malefashion` assets
+11. Kalles curated assets in `public/kalles` + Blade layout/partials
 12. Split admin/customer auth routes + `User::isStaff()` + `redirectGuestsTo` / `redirectUsersTo`
 13. Storefront register/login/account Form Requests + optional password update
 14. `Product::forCatalog()` + `ProductVariant::scopeActive()` + shop filters/`when`/`whereHas`
 15. `{product:slug}` binding vs admin id binding + `route('shop.show', $slug)`
-16. Shop/PDP Blade partials + related products query + `StorefrontCatalogTest`
+16. Kalles shop/PDP Blade + Laravel-driven Kalles RTL/LTR + `StorefrontCatalogTest`
 
 **Not used yet (later phases):** Shopping cart/session, checkout, customer addresses, Events/Listeners, Jobs/Queues, API Sanctum, email verification, password reset emails. Volume unit is still `Rule::in` (not an Enum).

@@ -3,9 +3,9 @@
 ## Current Position
 
 - Roadmap phase: Phase 5 in progress (Customer accounts + Product catalog complete)
-- Current modules: Admin (CoolAdmin) + Localization + MaleFashion storefront (accounts + catalog)
-- Status: Product catalog implemented
-- Next pending: Phase 5 – Shopping cart
+- Current modules: Admin (CoolAdmin) + Localization + Kalles storefront (home-classic chrome + catalog)
+- Status: Home Classic full Blade port (demo sections kept for styling review)
+- Next pending: Phase 5 – Shopping cart (after optional home-classic cleanup)
 
 ## Completed Work
 
@@ -164,16 +164,19 @@ Verification:
 - EN/AR `storefront` translation files for nav, auth, account, and flash messages.
 - Feature tests: admin auth updated; customer auth coverage added.
 
-### Phase 5 - Product Catalog (MaleFashion)
+### Phase 5 - Product Catalog (Kalles)
 
 - Public shop listing at `GET /shop` and product detail at `GET /shop/{product:slug}`.
 - Catalog visibility: active product + active brand/category + at least one active variant (`Product::forCatalog()`).
 - Shop filters: search, brand slug, category slug, sort (latest / price / name); pagination (12).
-- MaleFashion shop index + PDP views with product card partial, gallery, volume variants, stock labels.
+- Storefront UI cut over from MaleFashion to **Kalles**: curated assets in `public/kalles`, Blade layout/partials, shop index (left sidebar), PDP (Swiper gallery + volume swatches).
+- **Home Classic full port:** near-literal `dist/home-classic.html` → `storefront/home.blade.php` with shared chrome from `header2`, classic footer, top banner, popup, and full `card-model` (quick view / cart / search / account offcanvas).
+- Demo sections (trending, blog, Instagram, shipping, mega menus) kept temporarily for full styling experience; cleanup deferred.
+- Laravel session locale drives Kalles built-in RTL/LTR (`bootstrap-rtl` / `app-rtl`, `html dir`); demo LTR/RTL footer toggle removed.
 - Add-to-cart UI disabled as coming soon (cart deferred to next Phase 5 task).
-- Header/footer Shop links, search overlay, and home CTA wired to the catalog.
-- EN/AR storefront `shop` and `product` translation keys.
-- Feature tests: `StorefrontCatalogTest` (5 tests, 25 assertions); Pint formatting passes.
+- Auth/account inherit home-classic chrome; `public/malefashion` removed.
+- EN/AR storefront `shop` and `product` translation keys retained; hero uses `storefront.home.*`.
+- Feature tests: `StorefrontCatalogTest` + customer auth coverage; Pint formatting passes.
 
 ## Known Pending Items
 

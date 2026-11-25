@@ -1,0 +1,395 @@
+/**
+ * Rose Oud — perfume storefront theme overlay.
+ * Reversible: remove this stylesheet from layouts/storefront.blade.php to discard.
+ *
+ * Parchment ground, damask-rose primary, brass for focus lines.
+ * White text on the primary is about 9.8:1. Muted text on the canvas is about 4.9:1.
+ */
+
+:root {
+    --perfume-canvas: #f3efe8;
+    --perfume-surface: #fffcf8;
+    --perfume-well: #f7f2eb;
+    --perfume-ink: #1c1418;
+    --perfume-ink-hover: #32262c;
+    --perfume-muted: #6d6468;
+    --perfume-accent: #6b3048;
+    --perfume-accent-rgb: 107, 48, 72;
+    --perfume-accent-hover: #552638;
+    --perfume-accent-active: #431e2c;
+    --perfume-accent-soft: #f6e8ed;
+    --perfume-line: #b08968;
+    --perfume-border: #e4dbd2;
+    --perfume-sale: #9a3040;
+    --perfume-banner: #1c1418;
+    --perfume-on-accent: #ffffff;
+
+    --bs-body-bg: var(--perfume-canvas);
+    --bs-body-color: var(--perfume-ink);
+    --bs-primary: var(--perfume-accent);
+    --bs-primary-rgb: var(--perfume-accent-rgb);
+    --bs-teal: var(--perfume-accent);
+    --bs-info: var(--perfume-accent);
+    --bs-info-rgb: var(--perfume-accent-rgb);
+    --bs-link-color: var(--perfume-accent);
+    --bs-link-color-rgb: var(--perfume-accent-rgb);
+    --bs-link-hover-color: var(--perfume-accent-hover);
+    --bs-link-hover-color-rgb: var(--perfume-accent-rgb);
+    --bs-navbar-hover-color: var(--perfume-accent);
+    --bs-navbar-active-color: var(--perfume-accent);
+    --bs-dropdown-link-hover-color: var(--perfume-accent);
+    --bs-dropdown-link-hover-bg: var(--perfume-accent-soft);
+    --bs-dropdown-link-active-bg: var(--perfume-accent);
+    --bs-primary-text-emphasis: var(--perfume-accent-hover);
+    --bs-primary-bg-subtle: var(--perfume-accent-soft);
+    --bs-primary-border-subtle: var(--perfume-line);
+    --bs-info-text-emphasis: var(--perfume-accent-hover);
+    --bs-info-bg-subtle: var(--perfume-accent-soft);
+    --bs-info-border-subtle: var(--perfume-line);
+    --bs-border-color: var(--perfume-border);
+    --bs-secondary-color: var(--perfume-muted);
+    --bs-tertiary-bg: var(--perfume-accent-soft);
+    --bs-focus-ring-color: rgba(var(--perfume-accent-rgb), 0.35);
+}
+
+body {
+    background-color: var(--perfume-canvas);
+    color: var(--perfume-ink);
+}
+
+a {
+    color: var(--perfume-accent);
+}
+
+a:hover,
+a:focus {
+    color: var(--perfume-accent-hover);
+}
+
+/* Kalles teal accent → rose oud */
+.text-teal,
+a.text-teal,
+.text-teal:hover,
+a.text-teal:hover {
+    color: var(--perfume-accent) !important;
+}
+
+.bg-teal,
+.badge.bg-teal {
+    background-color: var(--perfume-accent) !important;
+}
+
+.border-teal {
+    border-color: var(--perfume-accent) !important;
+}
+
+/* Bootstrap primary / info / teal-ish actions */
+.btn-primary,
+.btn-info {
+    --bs-btn-color: var(--perfume-on-accent);
+    --bs-btn-bg: var(--perfume-accent);
+    --bs-btn-border-color: var(--perfume-accent);
+    --bs-btn-hover-color: var(--perfume-on-accent);
+    --bs-btn-hover-bg: var(--perfume-accent-hover);
+    --bs-btn-hover-border-color: var(--perfume-accent-hover);
+    --bs-btn-active-color: var(--perfume-on-accent);
+    --bs-btn-active-bg: var(--perfume-accent-active);
+    --bs-btn-active-border-color: var(--perfume-accent-active);
+    --bs-btn-disabled-bg: var(--perfume-accent);
+    --bs-btn-disabled-border-color: var(--perfume-accent);
+}
+
+.btn-outline-primary,
+.btn-outline-info {
+    --bs-btn-color: var(--perfume-accent);
+    --bs-btn-border-color: var(--perfume-accent);
+    --bs-btn-hover-color: var(--perfume-on-accent);
+    --bs-btn-hover-bg: var(--perfume-accent);
+    --bs-btn-hover-border-color: var(--perfume-accent);
+    --bs-btn-active-color: var(--perfume-on-accent);
+    --bs-btn-active-bg: var(--perfume-accent-hover);
+    --bs-btn-active-border-color: var(--perfume-accent-hover);
+}
+
+.btn-dark,
+.btn-custom-dark {
+    --bs-btn-bg: var(--perfume-ink);
+    --bs-btn-border-color: var(--perfume-ink);
+    --bs-btn-hover-bg: var(--perfume-ink-hover);
+    --bs-btn-hover-border-color: var(--perfume-ink-hover);
+}
+
+/* Surfaces */
+.dropdown-menu,
+.offcanvas,
+.modal-content,
+.filter-box,
+.card {
+    background-color: var(--perfume-surface);
+}
+
+.navbar,
+.header,
+.main_header,
+.type_header {
+    background-color: var(--perfume-surface);
+}
+
+.h__top {
+    background-color: var(--perfume-canvas);
+    color: var(--perfume-muted);
+}
+
+.h__top .header-text > .cg,
+.h__top a {
+    color: var(--perfume-muted);
+}
+
+.h__top a:hover,
+.h__top a:focus {
+    color: var(--perfume-accent);
+}
+
+.h__top .cr {
+    color: var(--perfume-sale);
+}
+
+/* Top deal banner */
+.t_header {
+    background-color: var(--perfume-banner) !important;
+    color: var(--perfume-on-accent) !important;
+}
+
+.t_header a,
+.t_header .h_banner_close {
+    color: var(--perfume-on-accent) !important;
+}
+
+/* Product cards / media */
+.product-card-media {
+    background: var(--perfume-well) !important;
+}
+
+.topbar-product-card .product-button .btn,
+.product-button .btn {
+    border-color: var(--perfume-accent);
+    color: var(--perfume-ink);
+}
+
+.topbar-product-card .product-button .btn:hover,
+.product-button .btn:hover {
+    background-color: var(--perfume-accent);
+    border-color: var(--perfume-accent);
+    color: var(--perfume-on-accent);
+}
+
+/* Sale accents */
+.text-danger,
+.product-details .text-danger,
+.topbar-product-card .text-danger {
+    color: var(--perfume-sale) !important;
+}
+
+.new-label.bg-danger {
+    background-color: var(--perfume-sale) !important;
+}
+
+/* Sort / filter dropdown selected + hover.
+   Beats Kalles .dropdown .filter-dropdown li:hover a (#56cfe1 !important, #f2fbfd). */
+.filter-dropdown .dropdown-item.active,
+.filter-dropdown .dropdown-item:active,
+.filter-dropdown .dropdown-item:focus,
+.filter-dropdown .dropdown-item:hover,
+.filter-dropdown .dropdown-item.active:focus,
+.filter-dropdown .dropdown-item.active:hover,
+.filter-dropdown li:hover .dropdown-item,
+.dropdown .filter-dropdown li:hover a {
+    background-color: var(--perfume-accent-soft) !important;
+    color: var(--perfume-accent) !important;
+}
+
+/* Shop category bar and filter links. More specific than .nav-link:hover. */
+.navbar .navbar-nav .nav-item .nav-link:hover,
+.navbar .navbar-nav .nav-item .nav-link:focus,
+.filter-box .nav-link:hover,
+.filter-box .nav-link:focus,
+.filter-box a:hover,
+.filter-box a:focus,
+#filterOffcanvas a:hover,
+#filterOffcanvas a:focus,
+.filter-category a:hover,
+.filter-category a:focus {
+    color: var(--perfume-accent) !important;
+}
+
+/* Forms */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--perfume-line);
+    box-shadow: 0 0 0 0.2rem rgba(var(--perfume-accent-rgb), 0.2);
+}
+
+/* Nav pills / tabs accents. Grid column buttons stay clear; only their bars change. */
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link,
+.tab_header:not(.tab_filter) .nav-link.active {
+    background-color: var(--perfume-ink);
+    color: var(--perfume-on-accent);
+    border-color: var(--perfume-ink);
+}
+
+.tab_filter .nav-link.active,
+.tab_filter .nav-link.active:hover {
+    background-color: transparent !important;
+    border-color: var(--perfume-accent) !important;
+    color: var(--perfume-accent);
+}
+
+.tab_filter .nav-link.active .grid1 {
+    background-color: var(--perfume-accent);
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    color: var(--perfume-accent);
+}
+
+.product-tabs .nav-link:hover::before,
+.product-tabs .nav-link.active::before {
+    background-color: var(--perfume-accent);
+}
+
+/* Pagination */
+.page-link {
+    color: var(--perfume-accent);
+}
+
+.page-item.active .page-link {
+    background-color: var(--perfume-ink);
+    border-color: var(--perfume-ink);
+    color: var(--perfume-on-accent);
+}
+
+/* Footer soft canvas continuity */
+.footer-area,
+footer,
+.footer {
+    background-color: var(--perfume-surface);
+}
+
+/* Logo hover hint */
+.navbar-brand:hover img,
+.footer a:hover img {
+    opacity: 0.85;
+    filter: sepia(0.15);
+}
+
+/* Swiper / flickity accents */
+.swiper-pagination-bullet-active {
+    background: var(--perfume-accent) !important;
+}
+
+.productMain .swiper-button-next:hover::after,
+.productMain .swiper-button-prev:hover::after,
+.productJewellry .swiper-button-next:hover::after,
+.productJewellry .swiper-button-prev:hover::after,
+.mySwiper .swiper-button-next:hover::after,
+.mySwiper .swiper-button-prev:hover::after {
+    background-color: var(--perfume-accent) !important;
+    border-color: var(--perfume-accent) !important;
+    color: var(--perfume-on-accent) !important;
+}
+
+/* Navbar / toolbar hover — Kalles uses var(--bs-info) (was cyan) */
+.navbar-custom .navbar-nav .nav-item .nav-link:hover,
+.navbar-custom .navbar-nav .nav-item .nav-link:focus,
+.navbar-custom .navbar-nav .nav-item .nav-link.active {
+    color: var(--perfume-accent) !important;
+}
+
+.navbar-custom .topbar-toolbar a:hover,
+.navbar-custom .topbar-toolbar a:focus {
+    color: var(--perfume-accent) !important;
+}
+
+.navbar-custom .topbar-toolbar a:hover i,
+.navbar-custom .topbar-toolbar a:focus i {
+    color: var(--perfume-accent) !important;
+}
+
+/* Leftover Kalles cyan / Bootstrap info */
+.btn-teal {
+    --bs-btn-color: var(--perfume-on-accent);
+    --bs-btn-bg: var(--perfume-accent);
+    --bs-btn-border-color: var(--perfume-accent);
+    --bs-btn-hover-color: var(--perfume-on-accent);
+    --bs-btn-hover-bg: var(--perfume-accent-hover);
+    --bs-btn-hover-border-color: var(--perfume-accent-hover);
+    --bs-btn-active-color: var(--perfume-on-accent);
+    --bs-btn-active-bg: var(--perfume-accent-active);
+    --bs-btn-active-border-color: var(--perfume-accent-active);
+    --bs-btn-disabled-color: var(--perfume-on-accent);
+    --bs-btn-disabled-bg: var(--perfume-accent);
+    --bs-btn-disabled-border-color: var(--perfume-accent);
+    background-color: var(--perfume-accent) !important;
+    border-color: var(--perfume-accent) !important;
+    color: var(--perfume-on-accent) !important;
+}
+
+.btn-teal:hover,
+.btn-teal:focus,
+.btn-teal:active,
+.btn-teal.active {
+    background-color: var(--perfume-accent-hover) !important;
+    border-color: var(--perfume-accent-hover) !important;
+    color: var(--perfume-on-accent) !important;
+}
+
+.btn-teal:disabled,
+.btn-teal.disabled {
+    background-color: var(--perfume-accent) !important;
+    border-color: var(--perfume-accent) !important;
+    color: var(--perfume-on-accent) !important;
+    opacity: 0.65;
+}
+
+.link-info,
+a.link-info,
+.text-info,
+a.text-info {
+    color: var(--perfume-accent) !important;
+}
+
+.link-info:hover,
+a.link-info:hover,
+.text-info:hover,
+a.text-info:hover {
+    color: var(--perfume-accent-hover) !important;
+}
+
+.bg-info,
+.text-bg-info {
+    background-color: var(--perfume-accent) !important;
+    color: var(--perfume-on-accent) !important;
+}
+
+.border-info {
+    border-color: var(--perfume-accent) !important;
+}
+
+.form-check-input:checked,
+.checkbox-product.form-check-input:checked {
+    background-color: var(--perfume-accent) !important;
+    border-color: var(--perfume-accent) !important;
+}
+
+.form-check-input:checked ~ .form-check-label,
+.form-check-input:checked + .form-check-label,
+.filter-box .form-check-input:checked + .form-check-label {
+    color: var(--perfume-accent) !important;
+}
+
+.form-check-input:focus {
+    border-color: var(--perfume-line);
+    box-shadow: 0 0 0 0.2rem rgba(var(--perfume-accent-rgb), 0.25);
+}
